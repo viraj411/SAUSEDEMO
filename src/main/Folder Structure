@@ -1,0 +1,14 @@
+saucedemo-automation/
+│── src/main/java/
+│   ├── pages/
+│   │   ├── LoginPage.java
+│   │   ├── ProductPage.java
+│   │   ├── CartPage.java
+│   │   ├── CheckoutPage.java
+│   ├── utils/
+│   │   ├── WebDriverManager.java
+│── src/test/java/
+│   ├── tests/
+│   │   ├── SauceDemoTest.java
+│── pom.xml
+│── testng.xml

@@ -1,0 +1,8 @@
+<suite name="SauceDemoSuite">
+    <test name="E2E Test">
+        <classes>
+            <class name="Tests.SauceDemoTest"/>
+        </classes>
+    </test>
+</suite>
+
