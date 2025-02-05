@@ -17,6 +17,7 @@ public class CheckoutPage {
     private By continueButton = By.id("continue");
     private By finishButton = By.id("finish");
     private By successMessage = By.className("complete-header");
+    private By backtohome = By.id("back-to-products");
 
     // Actions
     public void enterShippingDetails(String firstName, String lastName, String zip) {
@@ -32,6 +33,10 @@ public class CheckoutPage {
 
     public boolean isOrderSuccessful() {
         return driver.findElement(successMessage).getText().equals("Thank you for your order!");
+    }
+
+    public void clickBacktohome() {
+        driver.findElement(backtohome).click();
     }
 }
 

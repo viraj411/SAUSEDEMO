@@ -1,7 +1,6 @@
 package Tests;
 
 import Pages.*;
-import browserstack.shaded.jackson.annotation.JsonTypeInfo;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -9,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.WebDriverManager;
 
-public class SauceDemoTest  {
+public class SauceDemoTest {
 
     WebDriver driver;
     LoginPage loginPage;
@@ -37,8 +36,9 @@ public class SauceDemoTest  {
         Assert.assertEquals(driver.getTitle(), "Swag Labs");
         System.out.println("Login successful");
     }
+
     @Test(priority = 2)
-    public void checkhomepagecontent(){
+    public void checkhomepagecontent() {
         homepage.clickMenu();
         homepage.printMenuItemsAndCheckClickable();
         homepage.clickclose();
@@ -49,7 +49,7 @@ public class SauceDemoTest  {
 
     @Test(priority = 3)
     public void testAddToCart() {
-        productPage.addToCart();
+        productPage.singleaddToCart();
         productPage.openCart();
         Assert.assertEquals(cartPage.getCartQuantity(), "1");
         System.out.println("Item added to cart successfully");
@@ -62,6 +62,14 @@ public class SauceDemoTest  {
         checkoutPage.completeOrder();
         Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order was not successful!");
         System.out.println("Order placed successfully");
+        checkoutPage.clickBacktohome();
+    }
+
+    @Test(priority = 5)
+    public void testaddingandremovingtheproducts() {
+        productPage.addAllItemsToCart();
+        productPage.openCart();
+        productPage.removeAllItemsFromCart();
     }
 
     @AfterClass

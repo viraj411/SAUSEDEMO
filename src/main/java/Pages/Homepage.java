@@ -57,59 +57,61 @@ public class Homepage {
     }
 
     public void clickMenu() {
+
         driver.findElement(threedot).click();
     }
 
     public void clickclose() {
         driver.findElement(closemenu).click();
     }
+
     public boolean issortingmenuDisplayed() {
         return driver.findElement(sortingmenu).isDisplayed();
     }
 
-        public void printSocialMediaIconsAndCheckClickable() {
-            List<WebElement> icons = driver.findElements(socialmediaicons); // Get all social media icons
+    public void printSocialMediaIconsAndCheckClickable() {
+        List<WebElement> icons = driver.findElements(socialmediaicons);// Get all social media icons
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            for (WebElement icon : icons) {
-                String text = icon.getText().trim(); // Get text if available
-                if (text.isEmpty()) {
-                    text = icon.getAttribute("aria-label"); // Use aria-label if text is missing
-                }
-                if (text == null || text.isEmpty()) {
-                    text = icon.getAttribute("title"); // Use title attribute if available
-                }
-                if (text == null || text.isEmpty()) {
-                    text = "Unknown Icon"; // Default text if nothing is found
-                }
-
-                // Check if icon is displayed and enabled
-                boolean isDisplayed = icon.isDisplayed();
-                boolean isEnabled = icon.isEnabled();
-
-                // Check if icon is clickable using WebDriverWait
-                boolean isClickable = false;
-                try {
-                    wait.until(ExpectedConditions.elementToBeClickable(icon));
-                    isClickable = true;
-                } catch (TimeoutException e) {
-                    isClickable = false;
-                }
-
-                // Print results
-                System.out.println("Social Media Icon:" + text);
-                System.out.println(" - Displayed: " + isDisplayed);
-                System.out.println(" - Enabled: " + isEnabled);
-                System.out.println(" - Clickable: " + isClickable);
-                System.out.println("---------------------------------");
+        for (WebElement icon : icons) {
+            String text = icon.getText().trim(); // Get text if available
+            if (text.isEmpty()) {
+                text = icon.getAttribute("aria-label"); // Use aria-label if text is missing
             }
-        }
+            if (text == null || text.isEmpty()) {
+                text = icon.getAttribute("title"); // Use title attribute if available
+            }
+            if (text == null || text.isEmpty()) {
+                text = "Unknown Icon"; // Default text if nothing is found
+            }
 
-        public String isFooterDisplayed() {
-        return driver.findElement(footer).getText();
+            // Check if icon is displayed and enabled
+            boolean isDisplayed = icon.isDisplayed();
+            boolean isEnabled = icon.isEnabled();
+
+            // Check if icon is clickable using WebDriverWait
+            boolean isClickable = false;
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(icon));
+                isClickable = true;
+            } catch (TimeoutException e) {
+                isClickable = false;
+            }
+
+            // Print results
+            System.out.println("Social Media Icon:" + text);
+            System.out.println(" - Displayed: " + isDisplayed);
+            System.out.println(" - Enabled: " + isEnabled);
+            System.out.println(" - Clickable: " + isClickable);
+            System.out.println("---------------------------------");
         }
     }
+
+    public String isFooterDisplayed() {
+        return driver.findElement(footer).getText();
+    }
+}
 
 
 
