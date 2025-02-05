@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.WebDriverManager;
 
-public class SauceDemoTest  extends WebDriverManager{
+public class SauceDemoTest  {
 
     WebDriver driver;
     LoginPage loginPage;

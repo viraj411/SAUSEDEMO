@@ -12,3 +12,4 @@ saucedemo-automation/
 │   │   ├── SauceDemoTest.java
 │── pom.xml
 │── testng.xml
+

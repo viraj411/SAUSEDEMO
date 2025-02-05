@@ -24,3 +24,4 @@ public class ProductPage {
         driver.findElement(cartIcon).click();
     }
 }
+

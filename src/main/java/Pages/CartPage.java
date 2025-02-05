@@ -21,6 +21,8 @@ public class CartPage {
 
     public void clickCheckout() {
         driver.findElement(checkoutButton).click();
+        System.out.println("Checkout Started");
+
     }
 }
 
