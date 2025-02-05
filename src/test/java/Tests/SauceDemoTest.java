@@ -1,9 +1,7 @@
 package Tests;
 
-import Pages.CartPage;
-import Pages.CheckoutPage;
-import Pages.LoginPage;
-import Pages.ProductPage;
+import Pages.*;
+import browserstack.shaded.jackson.annotation.JsonTypeInfo;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -18,6 +16,7 @@ public class SauceDemoTest  {
     ProductPage productPage;
     CartPage cartPage;
     CheckoutPage checkoutPage;
+    Homepage homepage;
 
     @BeforeClass
     public void setup() {
@@ -27,6 +26,7 @@ public class SauceDemoTest  {
         productPage = new ProductPage(driver);
         cartPage = new CartPage(driver);
         checkoutPage = new CheckoutPage(driver);
+        homepage = new Homepage(driver);
     }
 
     @Test(priority = 1)
@@ -37,8 +37,17 @@ public class SauceDemoTest  {
         Assert.assertEquals(driver.getTitle(), "Swag Labs");
         System.out.println("Login successful");
     }
-
     @Test(priority = 2)
+    public void checkhomepagecontent(){
+        homepage.clickMenu();
+        homepage.printMenuItemsAndCheckClickable();
+        homepage.clickclose();
+        Assert.assertTrue(homepage.issortingmenuDisplayed());
+        homepage.printSocialMediaIconsAndCheckClickable();
+        Assert.assertEquals(homepage.isFooterDisplayed(), "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
+    }
+
+    @Test(priority = 3)
     public void testAddToCart() {
         productPage.addToCart();
         productPage.openCart();
@@ -46,7 +55,7 @@ public class SauceDemoTest  {
         System.out.println("Item added to cart successfully");
     }
 
-    @Test(priority = 3)
+    @Test(priority = 4)
     public void testCheckout() {
         cartPage.clickCheckout();
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
