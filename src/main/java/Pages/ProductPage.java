@@ -13,6 +13,8 @@ public class ProductPage {
 
     WebDriver driver;
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    private double totalPrice = 0.0; // Declare totalPrice as an instance variable
+
 
     public ProductPage(WebDriver driver) {
         this.driver = driver;
@@ -42,6 +44,9 @@ public class ProductPage {
         List<WebElement> items = driver.findElements(inventoryitems);
         System.out.println("Total items found: " + items.size());
 
+        double pricevalue = 0;
+
+
         for (WebElement item : items) {
             String name = item.findElement(itemName).getText();
             String newname = name.substring(0, 20);
@@ -54,7 +59,15 @@ public class ProductPage {
             addToCart.click();
 
             System.out.println("Added to Cart: " + newname + " - " + price);
+
+            try {
+                double priceValue = Double.parseDouble(price.replaceAll("[^0-9.]", ""));
+                totalPrice += priceValue; // Accumulate total price
+            } catch (NumberFormatException e) {
+                System.out.println("Error parsing price: " + price);
+            }
         }
+        System.out.println("Total price of the products is " + totalPrice);
 
     }
 
@@ -66,13 +79,19 @@ public class ProductPage {
             wait.until(ExpectedConditions.elementToBeClickable(remove));
             remove.click();
 
-
         }
 
+    }
 
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
 
 }
+
+
+
+
 
 

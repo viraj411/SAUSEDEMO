@@ -43,6 +43,8 @@ public class SauceDemoTest {
         homepage.printMenuItemsAndCheckClickable();
         homepage.clickclose();
         Assert.assertTrue(homepage.issortingmenuDisplayed());
+        homepage.checksortingByAlphabets();
+        homepage.checkSortingByZtoA();
         homepage.printSocialMediaIconsAndCheckClickable();
         Assert.assertEquals(homepage.isFooterDisplayed(), "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
     }
@@ -59,10 +61,11 @@ public class SauceDemoTest {
     public void testCheckout() {
         cartPage.clickCheckout();
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
+       Assert.assertTrue(checkoutPage.comparePrice());
         checkoutPage.completeOrder();
         Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order was not successful!");
         System.out.println("Order placed successfully");
-        checkoutPage.clickBacktohome();
+        checkoutPage.clickBackToHome();
     }
 
     @Test(priority = 5)
