@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="Tests.SauceDemoTest" time="4.711" tests="5" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/test-classes:/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/classes:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-java/4.27.0/selenium-java-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/4.27.0/selenium-chrome-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/com/google/auto/service/auto-service-annotations/1.1.1/auto-service-annotations-1.1.1.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-chromium-driver/4.27.0/selenium-chromium-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-json/4.27.0/selenium-json-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-manager/4.27.0/selenium-manager-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v129/4.27.0/selenium-devtools-v129-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v130/4.27.0/selenium-devtools-v130-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v131/4.27.0/selenium-devtools-v131-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v85/4.27.0/selenium-devtools-v85-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/4.27.0/selenium-edge-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/4.27.0/selenium-firefox-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-http/4.27.0/selenium-http-4.27.0.jar:/Users/virajabhang/.m2/repository/dev/failsafe/failsafe/3.3.2/failsafe-3.3.2.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/4.27.0/selenium-ie-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/4.27.0/selenium-remote-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar:/Users/virajabhang/.m2/repository/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar:/Users/virajabhang/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/virajabhang/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/virajabhang/.m2/repository/org/checkerframework/checker-qual/3.43.0/checker-qual-3.43.0.jar:/Users/virajabhang/.m2/repository/com/google/errorprone/error_prone_annotations/2.28.0/error_prone_annotations-2.28.0.jar:/Users/virajabhang/.m2/repository/com/google/j2objc/j2objc-annotations/3.0.0/j2objc-annotations-3.0.0.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/semconv/opentelemetry-semconv/1.25.0-alpha/opentelemetry-semconv-1.25.0-alpha.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-api/1.44.1/opentelemetry-api-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-context/1.44.1/opentelemetry-context-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging/1.44.1/opentelemetry-exporter-logging-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.44.1/opentelemetry-sdk-common-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi/1.44.1/opentelemetry-sdk-extension-autoconfigure-spi-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.44.1/opentelemetry-sdk-extension-autoconfigure-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-api-incubator/1.44.1-alpha/opentelemetry-api-incubator-1.44.1-alpha.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.44.1/opentelemetry-sdk-trace-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.44.1/opentelemetry-sdk-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.44.1/opentelemetry-sdk-metrics-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.44.1/opentelemetry-sdk-logs-1.44.1.jar:/Users/virajabhang/.m2/repository/net/bytebuddy/byte-buddy/1.15.10/byte-buddy-1.15.10.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-os/4.27.0/selenium-os-4.27.0.jar:/Users/virajabhang/.m2/repository/org/apache/commons/commons-exec/1.4.0/commons-exec-1.4.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/4.27.0/selenium-safari-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-support/4.27.0/selenium-support-4.27.0.jar:/Users/virajabhang/.m2/repository/com/aventstack/extentreports/5.0.9/extentreports-5.0.9.jar:/Users/virajabhang/.m2/repository/io/reactivex/rxjava3/rxjava/3.0.4/rxjava-3.0.4.jar:/Users/virajabhang/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar:/Users/virajabhang/.m2/repository/org/freemarker/freemarker/2.3.30/freemarker-2.3.30.jar:/Users/virajabhang/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar:/Users/virajabhang/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar:/Users/virajabhang/.m2/repository/org/testng/testng/7.10.2/testng-7.10.2.jar:/Users/virajabhang/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/Users/virajabhang/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/Users/virajabhang/.m2/repository/org/webjars/jquery/3.7.1/jquery-3.7.1.jar:/Users/virajabhang/.m2/repository/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar:/Users/virajabhang/.m2/repository/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar:/Users/virajabhang/.m2/repository/com/browserstack/browserstack-java-sdk/1.23.4/browserstack-java-sdk-1.23.4.jar:/Users/virajabhang/.m2/repository/tech/grasshopper/htmlextentreporter/1.1.0/htmlextentreporter-1.1.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-api/4.27.0/selenium-api-4.27.0.jar:/Users/virajabhang/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:"/>
+    <property name="java.vm.vendor" value="Homebrew"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="user.timezone" value="Asia/Kolkata"/>
+    <property name="suiteXmlFile" value="testng.xml"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/surefire/surefirebooter-20250206224645452_3.jar /Users/virajabhang/IdeaProjects/SAUSEDEMO/target/surefire 2025-02-06T22-46-45_404-jvmRun1 surefire-20250206224645452_1tmp surefire_0-20250206224645452_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/test-classes:/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/classes:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-java/4.27.0/selenium-java-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/4.27.0/selenium-chrome-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/com/google/auto/service/auto-service-annotations/1.1.1/auto-service-annotations-1.1.1.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-chromium-driver/4.27.0/selenium-chromium-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-json/4.27.0/selenium-json-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-manager/4.27.0/selenium-manager-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v129/4.27.0/selenium-devtools-v129-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v130/4.27.0/selenium-devtools-v130-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v131/4.27.0/selenium-devtools-v131-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v85/4.27.0/selenium-devtools-v85-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/4.27.0/selenium-edge-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/4.27.0/selenium-firefox-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-http/4.27.0/selenium-http-4.27.0.jar:/Users/virajabhang/.m2/repository/dev/failsafe/failsafe/3.3.2/failsafe-3.3.2.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/4.27.0/selenium-ie-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/4.27.0/selenium-remote-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/com/google/guava/guava/33.3.1-jre/guava-33.3.1-jre.jar:/Users/virajabhang/.m2/repository/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2.jar:/Users/virajabhang/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/virajabhang/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/virajabhang/.m2/repository/org/checkerframework/checker-qual/3.43.0/checker-qual-3.43.0.jar:/Users/virajabhang/.m2/repository/com/google/errorprone/error_prone_annotations/2.28.0/error_prone_annotations-2.28.0.jar:/Users/virajabhang/.m2/repository/com/google/j2objc/j2objc-annotations/3.0.0/j2objc-annotations-3.0.0.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/semconv/opentelemetry-semconv/1.25.0-alpha/opentelemetry-semconv-1.25.0-alpha.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-api/1.44.1/opentelemetry-api-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-context/1.44.1/opentelemetry-context-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging/1.44.1/opentelemetry-exporter-logging-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.44.1/opentelemetry-sdk-common-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi/1.44.1/opentelemetry-sdk-extension-autoconfigure-spi-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.44.1/opentelemetry-sdk-extension-autoconfigure-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-api-incubator/1.44.1-alpha/opentelemetry-api-incubator-1.44.1-alpha.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.44.1/opentelemetry-sdk-trace-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.44.1/opentelemetry-sdk-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.44.1/opentelemetry-sdk-metrics-1.44.1.jar:/Users/virajabhang/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.44.1/opentelemetry-sdk-logs-1.44.1.jar:/Users/virajabhang/.m2/repository/net/bytebuddy/byte-buddy/1.15.10/byte-buddy-1.15.10.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-os/4.27.0/selenium-os-4.27.0.jar:/Users/virajabhang/.m2/repository/org/apache/commons/commons-exec/1.4.0/commons-exec-1.4.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/4.27.0/selenium-safari-driver-4.27.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-support/4.27.0/selenium-support-4.27.0.jar:/Users/virajabhang/.m2/repository/com/aventstack/extentreports/5.0.9/extentreports-5.0.9.jar:/Users/virajabhang/.m2/repository/io/reactivex/rxjava3/rxjava/3.0.4/rxjava-3.0.4.jar:/Users/virajabhang/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar:/Users/virajabhang/.m2/repository/org/freemarker/freemarker/2.3.30/freemarker-2.3.30.jar:/Users/virajabhang/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar:/Users/virajabhang/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar:/Users/virajabhang/.m2/repository/org/testng/testng/7.10.2/testng-7.10.2.jar:/Users/virajabhang/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/Users/virajabhang/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/Users/virajabhang/.m2/repository/org/webjars/jquery/3.7.1/jquery-3.7.1.jar:/Users/virajabhang/.m2/repository/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar:/Users/virajabhang/.m2/repository/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar:/Users/virajabhang/.m2/repository/com/browserstack/browserstack-java-sdk/1.23.4/browserstack-java-sdk-1.23.4.jar:/Users/virajabhang/.m2/repository/tech/grasshopper/htmlextentreporter/1.1.0/htmlextentreporter-1.1.0.jar:/Users/virajabhang/.m2/repository/org/seleniumhq/selenium/selenium-api/4.27.0/selenium-api-4.27.0.jar:/Users/virajabhang/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/virajabhang"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO/target/surefire/surefirebooter-20250206224645452_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="23.0.1"/>
+    <property name="user.name" value="virajabhang"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="14.6.1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Homebrew"/>
+    <property name="localRepository" value="/Users/virajabhang/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/tb/w9w1b_gx1ln5thst29sf_54c0000gp/T/"/>
+    <property name="java.version" value="23.0.1"/>
+    <property name="user.dir" value="/Users/virajabhang/IdeaProjects/SAUSEDEMO"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/virajabhang/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Homebrew"/>
+    <property name="java.vm.version" value="23.0.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="testLogin" classname="Tests.SauceDemoTest" time="0.217">
+    <system-out><![CDATA[Login successful
+]]></system-out>
+    <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Feb 06, 2025 10:46:47 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+WARNING: Unable to find an exact match for CDP version 132, returning the closest version; found: 131; Please update to a Selenium version that supports CDP version 132
+]]></system-err>
+  </testcase>
+  <testcase name="checkhomepagecontent" classname="Tests.SauceDemoTest" time="1.118">
+    <system-out><![CDATA[Menu Item: 
+ - Enabled: true
+ - Clickable: true
+---------------------------------
+Selected sorting option: Name (A to Z)
+Total inventory items: 6
+The inventory list is sorted in A to Z order.
+Selected sorting option: Name (Z to A)
+Total inventory items: 6
+The inventory list is sorted in Z to A order.
+Selected sorting price: Price (low to high)
+Total inventory items: 6
+Low to High price 7.99
+Low to High price 9.99
+Low to High price 15.99
+Low to High price 15.99
+Low to High price 29.99
+Low to High price 49.99
+The inventory list is correctly sorted from Low to High.
+Selected sorting price: Price (high to low)
+Total inventory items: 6
+High to low price 49.99
+High to low price 29.99
+High to low price 15.99
+High to low price 15.99
+High to low price 9.99
+High to low price 7.99
+The inventory list is correctly sorted from High to Low.
+Social Media Icon:Twitter
+Facebook
+LinkedIn
+ - Displayed: true
+ - Enabled: true
+ - Clickable: true
+---------------------------------
+]]></system-out>
+  </testcase>
+  <testcase name="testAddToCart" classname="Tests.SauceDemoTest" time="0.072">
+    <system-out><![CDATA[Item added to cart successfully
+]]></system-out>
+  </testcase>
+  <testcase name="testCheckout" classname="Tests.SauceDemoTest" time="0.281">
+    <system-out><![CDATA[Checkout Started
+Total items found: 1
+Raw price text: '$29.99'
+Calculated Total Price: $ 29.99
+Expected Total: $32.39
+Displayed Total: $32.39
+Order placed successfully
+]]></system-out>
+  </testcase>
+  <testcase name="testaddingandremovingtheproducts" classname="Tests.SauceDemoTest" time="0.474">
+    <system-out><![CDATA[Total items found: 6
+Added to Cart: Sauce Labs Backpack
+ - $29.99
+Added to Cart: Sauce Labs Bike Ligh - $9.99
+Added to Cart: Sauce Labs Bolt T-Sh - $15.99
+Added to Cart: Sauce Labs Fleece Ja - $49.99
+Added to Cart: Sauce Labs Onesie
+Ri - $7.99
+Added to Cart: Test.allTheThings()  - $15.99
+Total price of the products is 129.94
+Total items found in the cart: 6
+]]></system-out>
+  </testcase>
+</testsuite>

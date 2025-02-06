@@ -13,3 +13,6 @@ saucedemo-automation/
 │── pom.xml
 │── testng.xml
 
+How to run from terminal use this -mvn test -DsuiteXmlFile=testng.xml
+
+

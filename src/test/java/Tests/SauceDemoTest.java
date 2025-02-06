@@ -45,6 +45,8 @@ public class SauceDemoTest {
         Assert.assertTrue(homepage.issortingmenuDisplayed());
         homepage.checksortingByAlphabets();
         homepage.checkSortingByZtoA();
+        homepage.checkPriceSortingLowToHigh();
+        homepage.checkPriceSortingHighToLow();
         homepage.printSocialMediaIconsAndCheckClickable();
         Assert.assertEquals(homepage.isFooterDisplayed(), "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
     }

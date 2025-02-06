@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Homepage {
@@ -155,6 +156,7 @@ public class Homepage {
             System.out.println("The inventory list is NOT sorted in A to Z order.");
         }
     }
+
     public void checkSortingByZtoA() {
         // Wait for the sorting dropdown to be visible
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -202,9 +204,102 @@ public class Homepage {
             System.out.println("The inventory list is NOT sorted in Z to A order.");
         }
     }
+    public void checkPriceSortingLowToHigh() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // Wait for the sorting dropdown to be visible
+        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+
+        Select sc = new Select(sortingDropdown);
+        sc.selectByIndex(2);  // Selecting the "Low to High" option
+
+        // Re-fetch the sorting dropdown to avoid stale element exceptions
+        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+        sc = new Select(sortingDropdown);
+
+        // Wait for the selected option to be visible
+        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
+        String selectedPriceLowToHigh = selectedOption.getText();
+        System.out.println("Selected sorting price: " + selectedPriceLowToHigh);
+
+        // Wait for the inventory prices to be visible
+        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_price")));
+        System.out.println("Total inventory items: " + inventoryListItems.size());
+
+        // Extract and convert price values to a list of doubles
+        List<Double> prices = new ArrayList<>();
+        for (WebElement item : inventoryListItems) {
+            String priceText = item.getText().replace("$", "").trim();  // Remove "$" sign
+            prices.add(Double.parseDouble(priceText)); // Convert to double
+            System.out.println("Low to High price "+ priceText);
+        }
+
+        // Validate that prices are sorted in ascending order
+        boolean isSorted = true;
+        for (int i = 1; i < prices.size(); i++) {
+            if (prices.get(i) < prices.get(i - 1)) {  // If current price < previous price, it's incorrect
+                isSorted = false;
+                break;
+            }
+        }
+
+        if (isSorted) {
+            System.out.println("The inventory list is correctly sorted from Low to High.");
+        } else {
+            System.out.println("The inventory list is NOT sorted correctly from Low to High.");
+        }
+    }
+
+    public void checkPriceSortingHighToLow() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Wait for the sorting dropdown to be visible
+        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+
+        Select sc = new Select(sortingDropdown);
+        sc.selectByIndex(3);  // Selecting the "High to Low" option
+
+        // Re-fetch the sorting dropdown to avoid stale element exceptions
+        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+        sc = new Select(sortingDropdown);
+
+        // Wait for the selected option to be visible
+        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
+        String selectedPriceHighToLow = selectedOption.getText();
+        System.out.println("Selected sorting price: " + selectedPriceHighToLow);
+
+        // Wait for the inventory prices to be visible
+        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_price")));
+        System.out.println("Total inventory items: " + inventoryListItems.size());
+
+        // Extract and convert price values to a list of doubles
+        List<Double> prices = new ArrayList<>();
+        for (WebElement item : inventoryListItems) {
+            String priceText = item.getText().replace("$", "").trim();  // Remove "$" sign
+            prices.add(Double.parseDouble(priceText));  // Convert to double
+            System.out.println("High to low price " + priceText);
+        }
+
+        // Validate that prices are sorted in descending order (High to Low)
+        boolean isSorted = true;
+        for (int i = 1; i < prices.size(); i++) {
+            if (prices.get(i) > prices.get(i - 1)) {  // If current price > previous price, it's incorrect
+                isSorted = false;
+                break;
+            }
+        }
+
+        if (isSorted) {
+            System.out.println("The inventory list is correctly sorted from High to Low.");
+        } else {
+            System.out.println("The inventory list is NOT sorted correctly from High to Low.");
+        }
+    }
 
 }
+
+
+
 
 
 
