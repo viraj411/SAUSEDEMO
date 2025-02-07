@@ -1,6 +1,5 @@
 package Tests;
 import Pages.*;
-import browserstack.shaded.jackson.databind.deser.Deserializers;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -34,6 +33,18 @@ public class Loginpgetests {
         Assert.assertTrue(loginPage.invalidLogin("Admin@123","Wigzo@123"));
         System.out.println("Invalid Login");
 
+    }
+    @Test(priority = 3)
+    public void testLoginwithblankpassword() {
+        Assert.assertTrue(loginPage.validateLoginWithEmptyPassword());
+    }
+    @Test(priority = 4)
+    public void testLoginwithblankusername() {
+        Assert.assertTrue(loginPage.validateLoginWithEmptyUsername());
+    }
+    @Test(priority = 5)
+    public void testLoginwithblankusernameandpassword() {
+        Assert.assertTrue(loginPage.validateLoginWithEmptyUsernameAndPassword());
     }
 
     @AfterClass

@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
 public class LoginPage {
@@ -28,8 +29,8 @@ public class LoginPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
         wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-
     }
+
     public void logout() {
         wait.until(ExpectedConditions.elementToBeClickable(threedot)).click();
         wait.until(ExpectedConditions.elementToBeClickable(logoutIcon)).click();
@@ -42,35 +43,49 @@ public class LoginPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
         wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-
         WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
         String errorMessageText = errorElement.getText();
         System.out.println(errorMessageText);
-
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
         return errorMessageText.equals("Epic sadface: Username and password do not match any user in this service");
     }
 
+
+    public boolean validateLoginWithEmptyPassword() {
+           wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("Viraj");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("");
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        String errorMessageText = errorElement.getText();
+        System.out.println(errorMessageText);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
+        return (errorMessageText.contains("password"));
+
+
+    }
+
+    public boolean validateLoginWithEmptyUsername() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("<PASSWORD>");
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        String errorMessageText = errorElement.getText();
+        System.out.println(errorMessageText);
+        return errorMessageText.contains("Username");
+
+    }
+    public boolean validateLoginWithEmptyUsernameAndPassword() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("");
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        String errorMessageText = errorElement.getText();
+        System.out.println(errorMessageText);
+        return errorMessageText.contains("Username") || errorMessageText.contains("password");
+    }
+
+
 }
-
- /*  public boolean validateLoginWithEmptyPassword() {
-        driver.findElement(usernameField).sendKeys("standard_user");
-        driver.findElement(passwordField).sendKeys("");
-        driver.findElement(loginButton).click();
-        String errormassageforpassText = driver.findElement(errormassageforpass).getText();
-        System.out.println(  " Sonya "+errormassageforpassText);
-        return (errormassageforpassText.equals("Epic sadface: Please enter your password"));
-
-
-
-
-
-     }
-
-
-
-
-
-
-  *}
-
-  */
