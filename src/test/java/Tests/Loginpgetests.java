@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.WebDriverManager;
 
-public class Loginpgetests  {
+public class Loginpgetests {
     WebDriver driver;
     LoginPage loginPage;
 
@@ -20,22 +20,26 @@ public class Loginpgetests  {
         loginPage = new LoginPage(driver);
     }
 
-    @Test(priority = 2)
-    public void testvalidLogin() {
-        loginPage.enterUsername("standard_user");
-        loginPage.enterPassword("secret_sauce");
-        loginPage.clickLogin();
+    @Test(priority = 1)
+    public void testvalidLogin() throws InterruptedException {
+        loginPage.validLogin("standard_user", "secret_sauce");
         Assert.assertEquals(driver.getTitle(), "Swag Labs");
         System.out.println("Login successful");
+        loginPage.logout();
+
     }
-    @Test(priority = 1)
-    public void testInvalidLogin() {
-       Assert.assertTrue(loginPage.invalidlogin());
-        System.out.println( "Invalid Login");
+
+    @Test(priority = 2)
+    public void testnvalidLogin() {
+        Assert.assertTrue(loginPage.invalidLogin("Admin@123","Wigzo@123"));
+        System.out.println("Invalid Login");
+
     }
+
     @AfterClass
     public void teardown() {
         WebDriverManager.quitDriver();
     }
+
 
 }

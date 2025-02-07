@@ -29,10 +29,8 @@ public class SauceDemoTest {
     }
 
     @Test(priority = 1)
-    public void testLogin() {
-        loginPage.enterUsername("standard_user");
-        loginPage.enterPassword("secret_sauce");
-        loginPage.clickLogin();
+    public void testLogin() throws InterruptedException {
+        loginPage.validLogin("standard_user", "secret_sauce");
         Assert.assertEquals(driver.getTitle(), "Swag Labs");
         System.out.println("Login successful");
     }
