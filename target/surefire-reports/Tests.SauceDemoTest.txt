@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: Tests.SauceDemoTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.711 s -- in Tests.SauceDemoTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.575 s -- in Tests.SauceDemoTest

@@ -61,6 +61,8 @@ public class Homepage {
 
     public void clickMenu() {
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(threedot)).isDisplayed();
         driver.findElement(threedot).click();
     }
 

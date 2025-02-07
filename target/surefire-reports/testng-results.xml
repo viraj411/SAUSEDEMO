@@ -2,36 +2,36 @@
 <testng-results ignored="0" total="5" passed="5" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-02-06T22:46:45 IST" name="Surefire suite" finished-at="2025-02-06T22:46:50 IST" duration-ms="4345">
+  <suite started-at="2025-02-07T20:08:38 IST" name="Surefire suite" finished-at="2025-02-07T20:08:42 IST" duration-ms="4232">
     <groups>
     </groups>
-    <test started-at="2025-02-06T22:46:45 IST" name="Surefire test" finished-at="2025-02-06T22:46:50 IST" duration-ms="4345">
+    <test started-at="2025-02-07T20:08:38 IST" name="Surefire test" finished-at="2025-02-07T20:08:42 IST" duration-ms="4232">
       <class name="Tests.SauceDemoTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:45 IST" name="setup" finished-at="2025-02-06T22:46:47 IST" duration-ms="2057" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:38 IST" name="setup" finished-at="2025-02-07T20:08:40 IST" duration-ms="2042" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="testLogin()[pri:1, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:47 IST" name="testLogin" finished-at="2025-02-06T22:46:48 IST" duration-ms="214" status="PASS">
+        <test-method signature="testLogin()[pri:1, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:40 IST" name="testLogin" finished-at="2025-02-07T20:08:40 IST" duration-ms="217" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testLogin -->
-        <test-method signature="checkhomepagecontent()[pri:2, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:48 IST" name="checkhomepagecontent" finished-at="2025-02-06T22:46:49 IST" duration-ms="1127" status="PASS">
+        <test-method signature="checkhomepagecontent()[pri:2, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:40 IST" name="checkhomepagecontent" finished-at="2025-02-07T20:08:42 IST" duration-ms="1099" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- checkhomepagecontent -->
-        <test-method signature="testAddToCart()[pri:3, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:49 IST" name="testAddToCart" finished-at="2025-02-06T22:46:49 IST" duration-ms="71" status="PASS">
+        <test-method signature="testAddToCart()[pri:3, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:42 IST" name="testAddToCart" finished-at="2025-02-07T20:08:42 IST" duration-ms="62" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testAddToCart -->
-        <test-method signature="testCheckout()[pri:4, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:49 IST" name="testCheckout" finished-at="2025-02-06T22:46:49 IST" duration-ms="281" status="PASS">
+        <test-method signature="testCheckout()[pri:4, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:42 IST" name="testCheckout" finished-at="2025-02-07T20:08:42 IST" duration-ms="257" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testCheckout -->
-        <test-method signature="testaddingandremovingtheproducts()[pri:5, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:49 IST" name="testaddingandremovingtheproducts" finished-at="2025-02-06T22:46:50 IST" duration-ms="474" status="PASS">
+        <test-method signature="testaddingandremovingtheproducts()[pri:5, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:42 IST" name="testaddingandremovingtheproducts" finished-at="2025-02-07T20:08:42 IST" duration-ms="446" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testaddingandremovingtheproducts -->
-        <test-method is-config="true" signature="teardown()[pri:0, instance:Tests.SauceDemoTest@77d67cf3]" started-at="2025-02-06T22:46:50 IST" name="teardown" finished-at="2025-02-06T22:46:50 IST" duration-ms="103" status="PASS">
+        <test-method is-config="true" signature="teardown()[pri:0, instance:Tests.SauceDemoTest@6d1ef78d]" started-at="2025-02-07T20:08:42 IST" name="teardown" finished-at="2025-02-07T20:08:42 IST" duration-ms="94" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- teardown -->
