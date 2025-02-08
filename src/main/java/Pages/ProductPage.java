@@ -22,6 +22,7 @@ public class ProductPage {
     }
 
     // Locators
+    private By Productpagetitle = By.className("title");
     private By addToCartBtn = By.id("add-to-cart-sauce-labs-backpack");
     private By cartIcon = By.id("shopping_cart_container");
     private By addToCartButton = By.xpath(".//button[starts-with(@id, 'add-to-cart')]"); // Dynamic 'Add to Cart' button using partial ID match
@@ -106,6 +107,11 @@ public class ProductPage {
         }
 
 
+    }
+
+    public boolean verifyproductpagetitle() {
+        String productpagetitletext = wait.until(ExpectedConditions.visibilityOfElementLocated(Productpagetitle)).getText();
+        return (productpagetitletext.equals("Products"));
     }
 
 

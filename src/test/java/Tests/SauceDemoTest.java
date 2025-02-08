@@ -51,6 +51,7 @@ public class SauceDemoTest {
 
     @Test(priority = 3)
     public void testAddToCart() {
+        Assert.assertTrue(productPage.verifyproductpagetitle());
         productPage.checkproductdetails();
         productPage.singleaddToCart();
         productPage.openCart();
