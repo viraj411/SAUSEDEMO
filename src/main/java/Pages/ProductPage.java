@@ -12,12 +12,13 @@ import java.util.List;
 public class ProductPage {
 
     WebDriver driver;
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebDriverWait wait;
     private double totalPrice = 0.0; // Declare totalPrice as an instance variable
 
 
     public ProductPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     // Locators
@@ -30,6 +31,9 @@ public class ProductPage {
     private By itemPrice = By.className("inventory_item_price");
     private By cartQuantity = By.className("cart_item");
     private By continueShopping = By.id("continue-shopping");
+    private By Backtoproductbutton = By.id("back-to-products");
+    private By Firstproductname = By.xpath("//div[normalize-space()='Sauce Labs Backpack']");
+    private By Firstproductdisc = By.xpath("//div[normalize-space()='carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.']");
 
     // Actions
     public void singleaddToCart() {
@@ -85,6 +89,23 @@ public class ProductPage {
 
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    public void checkproductdetails() {
+        wait.until(ExpectedConditions.elementToBeClickable(Firstproductname)).click();
+        String firstproductnametext = wait.until(ExpectedConditions.elementToBeClickable(Firstproductname)).getText();
+        String firstproductdisctext = wait.until(ExpectedConditions.elementToBeClickable(Firstproductdisc)).getText();
+
+        System.out.println(firstproductnametext);
+        System.out.println(firstproductdisctext);
+
+        if ((firstproductnametext.equals("Sauce Labs Backpack")) && firstproductdisctext.equals("carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.")) {
+            wait.until(ExpectedConditions.elementToBeClickable(Backtoproductbutton)).click();
+        } else {
+            System.out.println("Product details does not match");
+        }
+
+
     }
 
 

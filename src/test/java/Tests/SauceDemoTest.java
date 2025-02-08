@@ -51,6 +51,7 @@ public class SauceDemoTest {
 
     @Test(priority = 3)
     public void testAddToCart() {
+        productPage.checkproductdetails();
         productPage.singleaddToCart();
         productPage.openCart();
         Assert.assertEquals(cartPage.getCartQuantity(), "1");
@@ -61,7 +62,7 @@ public class SauceDemoTest {
     public void testCheckout() {
         cartPage.clickCheckout();
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
-       Assert.assertTrue(checkoutPage.comparePrice());
+        Assert.assertTrue(checkoutPage.comparePrice());
         checkoutPage.completeOrder();
         Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order was not successful!");
         System.out.println("Order placed successfully");

@@ -206,6 +206,7 @@ public class Homepage {
             System.out.println("The inventory list is NOT sorted in Z to A order.");
         }
     }
+
     public void checkPriceSortingLowToHigh() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -233,7 +234,7 @@ public class Homepage {
         for (WebElement item : inventoryListItems) {
             String priceText = item.getText().replace("$", "").trim();  // Remove "$" sign
             prices.add(Double.parseDouble(priceText)); // Convert to double
-            System.out.println("Low to High price "+ priceText);
+            System.out.println("Low to High price " + priceText);
         }
 
         // Validate that prices are sorted in ascending order
