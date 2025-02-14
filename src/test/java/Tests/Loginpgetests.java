@@ -29,7 +29,7 @@ public class Loginpgetests {
     }
 
     @Test(priority = 2)
-    public void testnvalidLogin() {
+    public void testinvalidLogin() {
         Assert.assertTrue(loginPage.invalidLogin("Admin@123","Wigzo@123"));
         System.out.println("Invalid Login");
 
