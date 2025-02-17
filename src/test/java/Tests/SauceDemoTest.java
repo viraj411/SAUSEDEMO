@@ -62,6 +62,7 @@ public class SauceDemoTest {
     @Test(priority = 4)
     public void testCheckout() {
         cartPage.clickCheckout();
+        checkoutPage.verifyCheckoutFields("","","");
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
         Assert.assertTrue(checkoutPage.comparePrice());
         checkoutPage.completeOrder();

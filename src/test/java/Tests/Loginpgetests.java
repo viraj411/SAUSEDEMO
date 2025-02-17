@@ -14,7 +14,7 @@ public class Loginpgetests {
 
     @BeforeClass
     public void setup() {
-        driver = WebDriverManager.getDriver();
+        driver= WebDriverManager.getDriver();
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPage(driver);
     }

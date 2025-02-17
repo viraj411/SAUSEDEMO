@@ -27,6 +27,7 @@ public class CheckoutPage {
     private By totalCartSummary = By.className("summary_subtotal_label");
     private By totalTax = By.className("summary_tax_label");
     private By totalLabel = By.className("summary_total_label");
+    private By errormessage = By.xpath("//*[@id=\"checkout_info_container\"]/div/form/div[1]/div[4]/h3");
 
     // Helper function to parse prices
     private double parsePrice(String priceText) {
@@ -37,6 +38,20 @@ public class CheckoutPage {
             return 0.0;
         }
     }
+
+    public void verifyCheckoutFields(String firstName, String lastName, String zip) {
+        driver.findElement(firstNameField).sendKeys(firstName);
+        driver.findElement(lastNameField).sendKeys(lastName);
+        driver.findElement(zipCodeField).sendKeys(zip);
+        driver.findElement(continueButton).click();
+        String Errormessage = driver.findElement(errormessage).getText();
+        if (Errormessage.equals("Error: First Name is required")) {
+            System.out.println("Every CheckoutField has validation ");
+        }
+
+
+    }
+
 
     public void enterShippingDetails(String firstName, String lastName, String zip) {
         driver.findElement(firstNameField).sendKeys(firstName);
