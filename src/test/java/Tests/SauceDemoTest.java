@@ -37,6 +37,7 @@ public class SauceDemoTest {
 
     @Test(priority = 2)
     public void checkhomepagecontent() {
+        Assert.assertTrue(homepage.is_burger_menu_present());
         homepage.clickMenu();
         homepage.printMenuItemsAndCheckClickable();
         homepage.clickclose();
@@ -51,6 +52,7 @@ public class SauceDemoTest {
 
     @Test(priority = 3)
     public void testAddToCart() {
+        Assert.assertTrue(homepage.is_burger_menu_present());
         Assert.assertTrue(productPage.verifyproductpagetitle());
         Assert.assertTrue(productPage.verifyCartItemCountAfterAddingProduct());
         productPage.checkproductdetails();
@@ -62,6 +64,7 @@ public class SauceDemoTest {
 
     @Test(priority = 4)
     public void testCheckout() {
+        Assert.assertTrue(homepage.is_burger_menu_present());
         cartPage.clickCheckout();
         checkoutPage.verifyCheckoutFields("", "", "");
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
@@ -74,6 +77,7 @@ public class SauceDemoTest {
 
     @Test(priority = 5)
     public void testaddingandremovingtheproducts() {
+        Assert.assertTrue(homepage.is_burger_menu_present());
         productPage.addAllItemsToCart();
         productPage.openCart();
         productPage.removeAllItemsFromCart();

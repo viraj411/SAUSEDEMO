@@ -300,6 +300,9 @@ public class Homepage {
             System.out.println("The inventory list is NOT sorted correctly from High to Low.");
         }
     }
+    public boolean is_burger_menu_present(){
+       return driver.findElement(threedot).isDisplayed();
+    }
 
 }
 
