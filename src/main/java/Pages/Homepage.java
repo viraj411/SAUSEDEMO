@@ -1,6 +1,5 @@
 package Pages;
 
-import dev.failsafe.internal.util.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -113,8 +112,11 @@ public class Homepage {
         }
     }
 
-    public String isFooterDisplayed() {
-        return driver.findElement(footer).getText();
+    public boolean isFooterDisplayed() {
+       String footerText= driver.findElement(footer).getText();
+       return footerText.equals("© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
+
+
     }
 
 

@@ -46,7 +46,7 @@ public class SauceDemoTest {
         homepage.checkPriceSortingLowToHigh();
         homepage.checkPriceSortingHighToLow();
         homepage.printSocialMediaIconsAndCheckClickable();
-        Assert.assertEquals(homepage.isFooterDisplayed(), "© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
+        Assert.assertTrue(homepage.isFooterDisplayed());
     }
 
     @Test(priority = 3)
