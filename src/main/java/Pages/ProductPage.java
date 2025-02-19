@@ -114,6 +114,16 @@ public class ProductPage {
         return (productpagetitletext.equals("Products"));
     }
 
+    public boolean verifyCartItemCountAfterAddingProduct() {
+        driver.findElement(addToCartBtn).click();
+        String cartItemText = driver.findElement(cartIcon).getText().trim();
+        int cartItemCount = Integer.parseInt(cartItemText);
+        System.out.println("Cart item quantity is: " + cartItemCount);
+        if (cartItemCount == 1) {
+            driver.findElement(removecartitems).click();
+        }
+        return (cartItemCount==1);
+    }
 
 }
 

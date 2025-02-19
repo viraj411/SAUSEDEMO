@@ -52,6 +52,7 @@ public class SauceDemoTest {
     @Test(priority = 3)
     public void testAddToCart() {
         Assert.assertTrue(productPage.verifyproductpagetitle());
+        Assert.assertTrue(productPage.verifyCartItemCountAfterAddingProduct());
         productPage.checkproductdetails();
         productPage.singleaddToCart();
         productPage.openCart();
@@ -62,7 +63,7 @@ public class SauceDemoTest {
     @Test(priority = 4)
     public void testCheckout() {
         cartPage.clickCheckout();
-        checkoutPage.verifyCheckoutFields("","","");
+        checkoutPage.verifyCheckoutFields("", "", "");
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
         Assert.assertTrue(checkoutPage.comparePrice());
         checkoutPage.completeOrder();
