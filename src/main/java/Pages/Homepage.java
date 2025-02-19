@@ -1,9 +1,6 @@
 package Pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -300,8 +297,14 @@ public class Homepage {
             System.out.println("The inventory list is NOT sorted correctly from High to Low.");
         }
     }
-    public boolean is_burger_menu_present(){
-       return driver.findElement(threedot).isDisplayed();
+    public boolean isBurgerMenuPresent() {
+        try {
+            WebElement menu = driver.findElement(threedot);
+            return menu.isDisplayed() && menu.isEnabled();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
 }
