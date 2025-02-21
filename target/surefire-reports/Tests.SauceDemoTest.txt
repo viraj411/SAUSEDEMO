@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: Tests.SauceDemoTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.764 s -- in Tests.SauceDemoTest

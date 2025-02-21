@@ -1,13 +1,10 @@
 <suite name="SauceDemoSuite">
-    <test name="E2E Test">
+    <test name="E2E Test" count="3">
         <classes>
+            <class name="Tests.Loginpgetests"/>
             <class name="Tests.SauceDemoTest"/>
         </classes>
     </test>
 </suite>
-
-
-
-
 
 
