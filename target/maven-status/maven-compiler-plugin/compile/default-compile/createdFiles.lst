@@ -1,0 +1,7 @@
+Pages/ProductPage.class
+Pages/CheckoutPage.class
+utils/PracClass.class
+Pages/Homepage.class
+Pages/LoginPage.class
+Pages/CartPage.class
+utils/WebDriverManager.class

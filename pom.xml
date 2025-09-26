@@ -51,5 +51,23 @@
             <artifactId>selenium-api</artifactId>
             <version>4.27.0</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>utils.PracClass</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
