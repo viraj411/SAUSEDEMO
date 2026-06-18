@@ -25,8 +25,19 @@ public class WebDriverManager {
             options.setExperimentalOption("prefs", prefs);
             options.addArguments("--incognito");
 
+            // Run headless on CI (GitHub Actions sets CI=true); stay visible locally.
+            boolean headless = Boolean.parseBoolean(System.getenv("CI"));
+            if (headless) {
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
+            }
+
             driver = new ChromeDriver(options);
-            driver.manage().window().maximize();
+            if (!headless) {
+                driver.manage().window().maximize();
+            }
         }
         return driver;
     }
