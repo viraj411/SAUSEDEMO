@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [Surefire suite]" verbose="0">
-  <test thread-count="5" name="Surefire test(failed)" verbose="0">
+<suite name="Failed suite [SauceDemoSuite]" verbose="0">
+  <test thread-count="5" name="E2E Test(failed)" verbose="0">
     <classes>
-      <class name="Tests.SauceDemoTest">
+      <class name="Tests.LoginPageTests">
         <methods>
-          <include name="checkhomepagecontent"/>
-          <include name="teardown"/>
-          <include name="afterEachTest"/>
+          <include name="testLoginWithBlankUsername"/>
           <include name="setup"/>
+          <include name="teardown"/>
+          <include name="testLoginWithBlankUsernameAndPassword"/>
         </methods>
-      </class> <!-- Tests.SauceDemoTest -->
+      </class> <!-- Tests.LoginPageTests -->
     </classes>
-  </test> <!-- Surefire test(failed) -->
-</suite> <!-- Failed suite [Surefire suite] -->
+  </test> <!-- E2E Test(failed) -->
+</suite> <!-- Failed suite [SauceDemoSuite] -->

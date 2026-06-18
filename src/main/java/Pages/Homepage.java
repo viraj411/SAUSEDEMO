@@ -1,6 +1,11 @@
 package Pages;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,46 +15,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Homepage {
-    WebDriver driver;
+
+    private static final By BURGER_MENU_BUTTON = By.id("react-burger-menu-btn");
+    private static final By MENU_ITEMS = By.className("bm-item-list");
+    private static final By CLOSE_MENU_BUTTON = By.id("react-burger-cross-btn");
+    private static final By SORTING_MENU = By.className("product_sort_container");
+    private static final By SOCIAL_MEDIA_ICONS = By.className("social");
+    private static final By FOOTER = By.className("footer_copy");
+    private static final By INVENTORY_ITEM_NAMES = By.className("inventory_item_name");
+    private static final By INVENTORY_ITEM_PRICES = By.className("inventory_item_price");
+
+    private final WebDriver driver;
 
     public Homepage(WebDriver driver) {
         this.driver = driver;
     }
 
-    //Locators
-    private By threedot = By.id("react-burger-menu-btn");
-    private By menuItems = By.className("bm-item-list");
-    private By closemenu = By.id("react-burger-cross-btn");
-    private By sortingmenu = By.className("product_sort_container");
-    private By socialmediaicons = By.className("social");
-    private By footer = By.className("footer_copy");
-    public final String  BASE_URL ="https://www.saucedemo.com/";
-
+    private WebDriverWait createWait() {
+        return new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
 
     public void printMenuItemsAndCheckClickable() {
-        List<WebElement> items = driver.findElements(menuItems); // Get all menu items
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        List<WebElement> items = driver.findElements(MENU_ITEMS);
+        WebDriverWait wait = createWait();
 
         for (WebElement item : items) {
-            String text = item.getText().trim(); // Get the text and trim spaces
-
-            // Check if item is displayed and enabled
-            boolean isDisplayed = item.isDisplayed();
+            String text = item.getText().trim();
             boolean isEnabled = item.isEnabled();
+            boolean isClickable = isElementClickable(wait, item);
 
-            // Check if item is clickable using WebDriverWait
-            boolean isClickable = false;
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(item));
-                isClickable = true;
-            } catch (TimeoutException e) {
-                isClickable = false;
-            }
-
-            // Print results
             System.out.println("Menu Item: " + text);
-            //System.out.println(" - Displayed: " + isDisplayed);
             System.out.println(" - Enabled: " + isEnabled);
             System.out.println(" - Clickable: " + isClickable);
             System.out.println("---------------------------------");
@@ -57,52 +52,29 @@ public class Homepage {
     }
 
     public void clickMenu() {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(threedot)).isDisplayed();
-        driver.findElement(threedot).click();
+        WebDriverWait wait = createWait();
+        wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
     }
 
-    public void clickclose() {
-        driver.findElement(closemenu).click();
+    public void clickCloseMenu() {
+        driver.findElement(CLOSE_MENU_BUTTON).click();
     }
 
-    public boolean issortingmenuDisplayed() {
-        return driver.findElement(sortingmenu).isDisplayed();
+    public boolean isSortingMenuDisplayed() {
+        return driver.findElement(SORTING_MENU).isDisplayed();
     }
 
     public void printSocialMediaIconsAndCheckClickable() {
-        List<WebElement> icons = driver.findElements(socialmediaicons);// Get all social media icons
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        List<WebElement> icons = driver.findElements(SOCIAL_MEDIA_ICONS);
+        WebDriverWait wait = createWait();
 
         for (WebElement icon : icons) {
-            String text = icon.getText().trim(); // Get text if available
-            if (text.isEmpty()) {
-                text = icon.getAttribute("aria-label"); // Use aria-label if text is missing
-            }
-            if (text == null || text.isEmpty()) {
-                text = icon.getAttribute("title"); // Use title attribute if available
-            }
-            if (text == null || text.isEmpty()) {
-                text = "Unknown Icon"; // Default text if nothing is found
-            }
-
-            // Check if icon is displayed and enabled
+            String text = resolveIconLabel(icon);
             boolean isDisplayed = icon.isDisplayed();
             boolean isEnabled = icon.isEnabled();
+            boolean isClickable = isElementClickable(wait, icon);
 
-            // Check if icon is clickable using WebDriverWait
-            boolean isClickable = false;
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(icon));
-                isClickable = true;
-            } catch (TimeoutException e) {
-                isClickable = false;
-            }
-
-            // Print results
-            System.out.println("Social Media Icon:" + text);
+            System.out.println("Social Media Icon: " + text);
             System.out.println(" - Displayed: " + isDisplayed);
             System.out.println(" - Enabled: " + isEnabled);
             System.out.println(" - Clickable: " + isClickable);
@@ -111,198 +83,57 @@ public class Homepage {
     }
 
     public boolean isFooterDisplayed() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement footerElement = wait.until(ExpectedConditions.visibilityOfElementLocated(footer));
+        WebDriverWait wait = createWait();
+        WebElement footerElement = wait.until(ExpectedConditions.visibilityOfElementLocated(FOOTER));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", footerElement);
         String footerText = footerElement.getText().trim();
         return footerElement.isDisplayed()
                 && footerText.matches("© \\d{4} Sauce Labs\\. All Rights Reserved\\. Terms of Service \\| Privacy Policy");
     }
 
+    public void checkSortingByAlphabets() {
+        WebDriverWait wait = createWait();
+        Select sortDropdown = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(SORTING_MENU)));
+        sortDropdown.selectByIndex(0);
 
-    public void checksortingByAlphabets() {
-        // Wait for the sorting dropdown to be visible
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sortDropdown.getFirstSelectedOption()));
+        System.out.println("Selected sorting option: " + selectedOption.getText());
 
-        Select sc = new Select(sortingDropdown);
-        sc.selectByIndex(0);
-
-        // Wait for the dropdown to update the selected option
-        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
-        String selectedTextAtoZ = selectedOption.getText();
-
-        System.out.println("Selected sorting option: " + selectedTextAtoZ);
-
-        // Wait for the inventory list to be visible
-        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_name")));
-
+        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(INVENTORY_ITEM_NAMES));
         System.out.println("Total inventory items: " + inventoryListItems.size());
-
-        boolean isSorted = true;
-
-        for (int i = 1; i < inventoryListItems.size(); i++) {
-            String currentName = inventoryListItems.get(i).getText().trim();
-            String previousName = inventoryListItems.get(i - 1).getText().trim();
-
-            char currentFirstLetter = Character.toLowerCase(currentName.charAt(0));
-            char previousFirstLetter = Character.toLowerCase(previousName.charAt(0));
-
-            if (currentFirstLetter < previousFirstLetter) {
-                isSorted = false;
-                break; // Stop checking if the order is violated
-            }
-        }
-
-        if (isSorted) {
-            System.out.println("The inventory list is sorted in A to Z order.");
-        } else {
-            System.out.println("The inventory list is NOT sorted in A to Z order.");
-        }
+        System.out.println(isSortedByFirstLetter(inventoryListItems, true)
+                ? "The inventory list is sorted in A to Z order."
+                : "The inventory list is NOT sorted in A to Z order.");
     }
 
     public void checkSortingByZtoA() {
-        // Wait for the sorting dropdown to be visible
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
+        WebDriverWait wait = createWait();
+        Select sortDropdown = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(SORTING_MENU)));
+        sortDropdown.selectByIndex(1);
 
-        Select sc = new Select(sortingDropdown);
-        sc.selectByIndex(1);  // Select the second option for Z to A sorting
+        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(SORTING_MENU));
+        sortDropdown = new Select(sortingDropdown);
+        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sortDropdown.getFirstSelectedOption()));
+        System.out.println("Selected sorting option: " + selectedOption.getText());
 
-        // Re-locate the dropdown to get a fresh reference after the selection
-        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu)); // Re-fetching sortingDropdown after selecting
-
-        // Re-create the Select object with the fresh reference
-        sc = new Select(sortingDropdown);
-
-        // Wait for the updated first selected option to be visible
-        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
-
-        String selectedTextZtoA = selectedOption.getText();
-        System.out.println("Selected sorting option: " + selectedTextZtoA);
-
-        // Wait for the inventory list to be visible
-        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_name")));
-
+        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(INVENTORY_ITEM_NAMES));
         System.out.println("Total inventory items: " + inventoryListItems.size());
-
-        boolean isSorted = true;
-
-        // Check if the inventory list is sorted in reverse (Z to A) order
-        for (int i = 1; i < inventoryListItems.size(); i++) {
-            String currentName = inventoryListItems.get(i).getText().trim();
-            String previousName = inventoryListItems.get(i - 1).getText().trim();
-
-            char currentFirstLetter = Character.toLowerCase(currentName.charAt(0));
-            char previousFirstLetter = Character.toLowerCase(previousName.charAt(0));
-
-            if (currentFirstLetter > previousFirstLetter) {
-                isSorted = false;
-                break; // Stop checking if the order is violated
-            }
-        }
-
-        if (isSorted) {
-            System.out.println("The inventory list is sorted in Z to A order.");
-        } else {
-            System.out.println("The inventory list is NOT sorted in Z to A order.");
-        }
+        System.out.println(isSortedByFirstLetter(inventoryListItems, false)
+                ? "The inventory list is sorted in Z to A order."
+                : "The inventory list is NOT sorted in Z to A order.");
     }
 
     public void checkPriceSortingLowToHigh() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Wait for the sorting dropdown to be visible
-        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
-
-        Select sc = new Select(sortingDropdown);
-        sc.selectByIndex(2);  // Selecting the "Low to High" option
-
-        // Re-fetch the sorting dropdown to avoid stale element exceptions
-        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
-        sc = new Select(sortingDropdown);
-
-        // Wait for the selected option to be visible
-        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
-        String selectedPriceLowToHigh = selectedOption.getText();
-        System.out.println("Selected sorting price: " + selectedPriceLowToHigh);
-
-        // Wait for the inventory prices to be visible
-        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_price")));
-        System.out.println("Total inventory items: " + inventoryListItems.size());
-
-        // Extract and convert price values to a list of doubles
-        List<Double> prices = new ArrayList<>();
-        for (WebElement item : inventoryListItems) {
-            String priceText = item.getText().replace("$", "").trim();  // Remove "$" sign
-            prices.add(Double.parseDouble(priceText)); // Convert to double
-            System.out.println("Low to High price " + priceText);
-        }
-
-        // Validate that prices are sorted in ascending order
-        boolean isSorted = true;
-        for (int i = 1; i < prices.size(); i++) {
-            if (prices.get(i) < prices.get(i - 1)) {  // If current price < previous price, it's incorrect
-                isSorted = false;
-                break;
-            }
-        }
-
-        if (isSorted) {
-            System.out.println("The inventory list is correctly sorted from Low to High.");
-        } else {
-            System.out.println("The inventory list is NOT sorted correctly from Low to High.");
-        }
+        validatePriceSorting(2, true);
     }
 
     public void checkPriceSortingHighToLow() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Wait for the sorting dropdown to be visible
-        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
-
-        Select sc = new Select(sortingDropdown);
-        sc.selectByIndex(3);  // Selecting the "High to Low" option
-
-        // Re-fetch the sorting dropdown to avoid stale element exceptions
-        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(sortingmenu));
-        sc = new Select(sortingDropdown);
-
-        // Wait for the selected option to be visible
-        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sc.getFirstSelectedOption()));
-        String selectedPriceHighToLow = selectedOption.getText();
-        System.out.println("Selected sorting price: " + selectedPriceHighToLow);
-
-        // Wait for the inventory prices to be visible
-        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_price")));
-        System.out.println("Total inventory items: " + inventoryListItems.size());
-
-        // Extract and convert price values to a list of doubles
-        List<Double> prices = new ArrayList<>();
-        for (WebElement item : inventoryListItems) {
-            String priceText = item.getText().replace("$", "").trim();  // Remove "$" sign
-            prices.add(Double.parseDouble(priceText));  // Convert to double
-            System.out.println("High to low price " + priceText);
-        }
-
-        // Validate that prices are sorted in descending order (High to Low)
-        boolean isSorted = true;
-        for (int i = 1; i < prices.size(); i++) {
-            if (prices.get(i) > prices.get(i - 1)) {  // If current price > previous price, it's incorrect
-                isSorted = false;
-                break;
-            }
-        }
-
-        if (isSorted) {
-            System.out.println("The inventory list is correctly sorted from High to Low.");
-        } else {
-            System.out.println("The inventory list is NOT sorted correctly from High to Low.");
-        }
+        validatePriceSorting(3, false);
     }
+
     public boolean isBurgerMenuPresent() {
         try {
-            WebElement menu = driver.findElement(threedot);
+            WebElement menu = driver.findElement(BURGER_MENU_BUTTON);
             return menu.isDisplayed() && menu.isEnabled();
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
@@ -310,13 +141,75 @@ public class Homepage {
         }
     }
 
+    private void validatePriceSorting(int optionIndex, boolean ascending) {
+        WebDriverWait wait = createWait();
+        WebElement sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(SORTING_MENU));
+
+        Select sortDropdown = new Select(sortingDropdown);
+        sortDropdown.selectByIndex(optionIndex);
+
+        sortingDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(SORTING_MENU));
+        sortDropdown = new Select(sortingDropdown);
+
+        WebElement selectedOption = wait.until(ExpectedConditions.visibilityOf(sortDropdown.getFirstSelectedOption()));
+        System.out.println("Selected sorting price: " + selectedOption.getText());
+
+        List<WebElement> inventoryListItems = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(INVENTORY_ITEM_PRICES));
+        System.out.println("Total inventory items: " + inventoryListItems.size());
+
+        List<Double> prices = new ArrayList<>();
+        for (WebElement item : inventoryListItems) {
+            String priceText = item.getText().replace("$", "").trim();
+            prices.add(Double.parseDouble(priceText));
+            System.out.println((ascending ? "Low to High" : "High to Low") + " price " + priceText);
+        }
+
+        boolean isSorted = true;
+        for (int i = 1; i < prices.size(); i++) {
+            if (ascending ? prices.get(i) < prices.get(i - 1) : prices.get(i) > prices.get(i - 1)) {
+                isSorted = false;
+                break;
+            }
+        }
+
+        System.out.println(isSorted
+                ? "The inventory list is correctly sorted from " + (ascending ? "Low to High." : "High to Low.")
+                : "The inventory list is NOT sorted correctly from " + (ascending ? "Low to High." : "High to Low."));
+    }
+
+    private boolean isSortedByFirstLetter(List<WebElement> inventoryListItems, boolean ascending) {
+        for (int i = 1; i < inventoryListItems.size(); i++) {
+            char currentFirstLetter = Character.toLowerCase(inventoryListItems.get(i).getText().trim().charAt(0));
+            char previousFirstLetter = Character.toLowerCase(inventoryListItems.get(i - 1).getText().trim().charAt(0));
+
+            if (ascending ? currentFirstLetter < previousFirstLetter : currentFirstLetter > previousFirstLetter) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isElementClickable(WebDriverWait wait, WebElement element) {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    private String resolveIconLabel(WebElement icon) {
+        String text = icon.getText().trim();
+        if (!text.isEmpty()) {
+            return text;
+        }
+
+        text = icon.getAttribute("aria-label");
+        if (text != null && !text.isEmpty()) {
+            return text;
+        }
+
+        text = icon.getAttribute("title");
+        return (text == null || text.isEmpty()) ? "Unknown Icon" : text;
+    }
 }
-
-
-
-
-
-
-
-
-
