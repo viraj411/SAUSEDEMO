@@ -9,22 +9,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class LoginPage {
-    WebDriver driver;
-    WebDriverWait wait;  // WebDriverWait instance
+
+    private static final String INVALID_CREDENTIALS_MESSAGE =
+            "Epic sadface: Username and password do not match any user in this service";
+
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+
+    private final By usernameField = By.id("user-name");
+    private final By passwordField = By.id("password");
+    private final By loginButton = By.id("login-button");
+    private final By errorMessage = By.cssSelector("h3[data-test='error']");
+    private final By burgerMenuButton = By.id("react-burger-menu-btn");
+    private final By logoutLink = By.id("logout_sidebar_link");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));  // Set explicit wait timeout
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    private By usernameField = By.id("user-name");
-    private By passwordField = By.id("password");
-    private By loginButton = By.id("login-button");
-    private By errorMessage = By.xpath("//*[@id='login_button_container']//h3");
-    private By threedot = By.id("react-burger-menu-btn");
-    private By logoutIcon = By.id("logout_sidebar_link");
-
-    // Method for valid login and logout
     public void validLogin(String username, String password) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
         wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
@@ -32,60 +35,57 @@ public class LoginPage {
     }
 
     public void logout() {
-        wait.until(ExpectedConditions.elementToBeClickable(threedot)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(logoutIcon)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(burgerMenuButton)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
         System.out.println("Logged out successfully");
-
     }
 
-    // Method for invalid login validation
     public boolean invalidLogin(String username, String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        String errorMessageText = errorElement.getText();
-        System.out.println(errorMessageText);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
-        return errorMessageText.equals("Epic sadface: Username and password do not match any user in this service");
+        submitCredentials(username, password);
+        String errorMessageText = getErrorMessageText();
+        clearLoginFields();
+        return errorMessageText.equals(INVALID_CREDENTIALS_MESSAGE);
     }
-
 
     public boolean validateLoginWithEmptyPassword() {
-           wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("Viraj");
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("");
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        String errorMessageText = errorElement.getText();
-        System.out.println(errorMessageText);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
-        return (errorMessageText.contains("password"));
-
-
+        submitCredentials("standard_user", "");
+        String errorMessageText = getErrorMessageText();
+        clearLoginFields();
+        return errorMessageText.toLowerCase().contains("password");
     }
 
     public boolean validateLoginWithEmptyUsername() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("<PASSWORD>");
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        String errorMessageText = errorElement.getText();
-        System.out.println(errorMessageText);
+        submitCredentials("", "secret_sauce");
+        String errorMessageText = getErrorMessageText();
+        clearLoginFields();
         return errorMessageText.contains("Username");
-
     }
+
     public boolean validateLoginWithEmptyUsernameAndPassword() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys("");
+        submitCredentials("", "");
+        String errorMessageText = getErrorMessageText();
+        return errorMessageText.contains("Username") || errorMessageText.toLowerCase().contains("password");
+    }
+
+    private void submitCredentials(String username, String password) {
+        WebElement usernameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
+        WebElement passwordElement = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField));
+        usernameElement.clear();
+        passwordElement.clear();
+        usernameElement.sendKeys(username);
+        passwordElement.sendKeys(password);
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+    }
+
+    private String getErrorMessageText() {
         WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
         String errorMessageText = errorElement.getText();
         System.out.println(errorMessageText);
-        return errorMessageText.contains("Username") || errorMessageText.contains("password");
+        return errorMessageText;
     }
 
-
+    private void clearLoginFields() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
+    }
 }

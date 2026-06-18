@@ -1,41 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="5" passed="5" failed="0" skipped="0">
+<testng-results ignored="0" total="10" passed="10" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-02-17T17:50:38 IST" name="Surefire suite" finished-at="2025-02-17T17:50:44 IST" duration-ms="5313">
+  <suite started-at="2026-06-18T20:57:04 IST" name="SauceDemoSuite" finished-at="2026-06-18T20:57:11 IST" duration-ms="6450">
     <groups>
     </groups>
-    <test started-at="2025-02-17T17:50:38 IST" name="Surefire test" finished-at="2025-02-17T17:50:44 IST" duration-ms="5313">
-      <class name="Tests.SauceDemoTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:38 IST" name="setup" finished-at="2025-02-17T17:50:41 IST" duration-ms="2696" status="PASS">
+    <test started-at="2026-06-18T20:57:04 IST" name="E2E Test" finished-at="2026-06-18T20:57:11 IST" duration-ms="6450">
+      <class name="Tests.LoginPageTests">
+        <test-method is-config="true" signature="setup()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:04 IST" name="setup" finished-at="2026-06-18T20:57:06 IST" duration-ms="1336" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="testLogin()[pri:1, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:41 IST" name="testLogin" finished-at="2025-02-17T17:50:41 IST" duration-ms="218" status="PASS">
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:06 IST" name="navigateToLoginPage" finished-at="2026-06-18T20:57:06 IST" duration-ms="20" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testValidLogin()[pri:1, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:06 IST" name="testValidLogin" finished-at="2026-06-18T20:57:06 IST" duration-ms="773" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testValidLogin -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:06 IST" name="navigateToLoginPage" finished-at="2026-06-18T20:57:06 IST" duration-ms="16" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testInvalidLogin()[pri:2, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:06 IST" name="testInvalidLogin" finished-at="2026-06-18T20:57:07 IST" duration-ms="137" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInvalidLogin -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="navigateToLoginPage" finished-at="2026-06-18T20:57:07 IST" duration-ms="12" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginWithBlankPassword()[pri:3, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="testLoginWithBlankPassword" finished-at="2026-06-18T20:57:07 IST" duration-ms="106" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithBlankPassword -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="navigateToLoginPage" finished-at="2026-06-18T20:57:07 IST" duration-ms="13" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginWithBlankUsername()[pri:4, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="testLoginWithBlankUsername" finished-at="2026-06-18T20:57:07 IST" duration-ms="110" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithBlankUsername -->
+        <test-method is-config="true" signature="navigateToLoginPage()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="navigateToLoginPage" finished-at="2026-06-18T20:57:07 IST" duration-ms="12" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- navigateToLoginPage -->
+        <test-method signature="testLoginWithBlankUsernameAndPassword()[pri:5, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="testLoginWithBlankUsernameAndPassword" finished-at="2026-06-18T20:57:07 IST" duration-ms="87" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithBlankUsernameAndPassword -->
+        <test-method is-config="true" signature="teardown()[pri:0, instance:Tests.LoginPageTests@23986957]" started-at="2026-06-18T20:57:07 IST" name="teardown" finished-at="2026-06-18T20:57:07 IST" duration-ms="124" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- teardown -->
+      </class> <!-- Tests.LoginPageTests -->
+      <class name="Tests.SauceDemoTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:07 IST" name="setup" finished-at="2026-06-18T20:57:08 IST" duration-ms="1035" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="testLogin()[pri:1, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:08 IST" name="testLogin" finished-at="2026-06-18T20:57:08 IST" duration-ms="304" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testLogin -->
-        <test-method signature="checkhomepagecontent()[pri:2, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:41 IST" name="checkhomepagecontent" finished-at="2025-02-17T17:50:42 IST" duration-ms="1167" status="PASS">
+        <test-method signature="checkHomepageContent()[pri:2, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:08 IST" name="checkHomepageContent" finished-at="2026-06-18T20:57:10 IST" duration-ms="1134" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- checkhomepagecontent -->
-        <test-method signature="testAddToCart()[pri:3, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:42 IST" name="testAddToCart" finished-at="2025-02-17T17:50:43 IST" duration-ms="198" status="PASS">
+        </test-method> <!-- checkHomepageContent -->
+        <test-method signature="testAddToCart()[pri:3, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:10 IST" name="testAddToCart" finished-at="2026-06-18T20:57:10 IST" duration-ms="190" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testAddToCart -->
-        <test-method signature="testCheckout()[pri:4, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:43 IST" name="testCheckout" finished-at="2025-02-17T17:50:43 IST" duration-ms="379" status="PASS">
+        <test-method signature="testCheckout()[pri:4, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:10 IST" name="testCheckout" finished-at="2026-06-18T20:57:10 IST" duration-ms="458" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testCheckout -->
-        <test-method signature="testaddingandremovingtheproducts()[pri:5, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:43 IST" name="testaddingandremovingtheproducts" finished-at="2025-02-17T17:50:43 IST" duration-ms="493" status="PASS">
+        <test-method signature="testAddingAndRemovingProducts()[pri:5, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:10 IST" name="testAddingAndRemovingProducts" finished-at="2026-06-18T20:57:11 IST" duration-ms="427" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testaddingandremovingtheproducts -->
-        <test-method is-config="true" signature="teardown()[pri:0, instance:Tests.SauceDemoTest@6dee4f1b]" started-at="2025-02-17T17:50:43 IST" name="teardown" finished-at="2025-02-17T17:50:44 IST" duration-ms="141" status="PASS">
+        </test-method> <!-- testAddingAndRemovingProducts -->
+        <test-method is-config="true" signature="teardown()[pri:0, instance:Tests.SauceDemoTest@60704c]" started-at="2026-06-18T20:57:11 IST" name="teardown" finished-at="2026-06-18T20:57:11 IST" duration-ms="138" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- teardown -->
       </class> <!-- Tests.SauceDemoTest -->
-    </test> <!-- Surefire test -->
-  </suite> <!-- Surefire suite -->
+    </test> <!-- E2E Test -->
+  </suite> <!-- SauceDemoSuite -->
 </testng-results>

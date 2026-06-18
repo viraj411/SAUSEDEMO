@@ -1,6 +1,10 @@
 package Tests;
 
-import Pages.*;
+import Pages.CartPage;
+import Pages.CheckoutPage;
+import Pages.Homepage;
+import Pages.LoginPage;
+import Pages.ProductPage;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -10,17 +14,17 @@ import utils.WebDriverManager;
 
 public class SauceDemoTest {
 
-    WebDriver driver;
-    LoginPage loginPage;
-    ProductPage productPage;
-    CartPage cartPage;
-    CheckoutPage checkoutPage;
-    Homepage homepage;
+    private WebDriver driver;
+    private LoginPage loginPage;
+    private ProductPage productPage;
+    private CartPage cartPage;
+    private CheckoutPage checkoutPage;
+    private Homepage homepage;
 
     @BeforeClass
     public void setup() {
         driver = WebDriverManager.getDriver();
-        driver.get("https://www.saucedemo.com/");
+        driver.get(WebDriverManager.BASE_URL);
         loginPage = new LoginPage(driver);
         productPage = new ProductPage(driver);
         cartPage = new CartPage(driver);
@@ -29,42 +33,40 @@ public class SauceDemoTest {
     }
 
     @Test(priority = 1)
-    public void testLogin() throws InterruptedException {
+    public void testLogin() {
         loginPage.validLogin("standard_user", "secret_sauce");
         Assert.assertEquals(driver.getTitle(), "Swag Labs");
         System.out.println("Login successful");
+        WebDriverManager.takeScreenshot("testLogin");
     }
 
     @Test(priority = 2)
-    public void checkhomepagecontent() {
-        Assert.assertTrue(homepage.is_burger_menu_present());
+    public void checkHomepageContent() {
         homepage.clickMenu();
         homepage.printMenuItemsAndCheckClickable();
-        homepage.clickclose();
-        Assert.assertTrue(homepage.issortingmenuDisplayed());
-        homepage.checksortingByAlphabets();
+        homepage.clickCloseMenu();
+        Assert.assertTrue(homepage.isSortingMenuDisplayed());
+        homepage.checkSortingByAlphabets();
         homepage.checkSortingByZtoA();
         homepage.checkPriceSortingLowToHigh();
         homepage.checkPriceSortingHighToLow();
         homepage.printSocialMediaIconsAndCheckClickable();
         Assert.assertTrue(homepage.isFooterDisplayed());
+        WebDriverManager.takeScreenshot("checkhomepagecontent");
     }
 
     @Test(priority = 3)
     public void testAddToCart() {
-        Assert.assertTrue(homepage.is_burger_menu_present());
-        Assert.assertTrue(productPage.verifyproductpagetitle());
-        Assert.assertTrue(productPage.verifyCartItemCountAfterAddingProduct());
-        productPage.checkproductdetails();
-        productPage.singleaddToCart();
+        productPage.checkProductDetails();
+        productPage.addSingleItemToCart();
         productPage.openCart();
         Assert.assertEquals(cartPage.getCartQuantity(), "1");
         System.out.println("Item added to cart successfully");
+        WebDriverManager.takeScreenshot("testAddToCart");
     }
 
     @Test(priority = 4)
     public void testCheckout() {
-        Assert.assertTrue(homepage.is_burger_menu_present());
         cartPage.clickCheckout();
         checkoutPage.verifyCheckoutFields("", "", "");
         checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
@@ -73,14 +75,15 @@ public class SauceDemoTest {
         Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order was not successful!");
         System.out.println("Order placed successfully");
         checkoutPage.clickBackToHome();
+        WebDriverManager.takeScreenshot("testCheckout");
     }
 
     @Test(priority = 5)
-    public void testaddingandremovingtheproducts() {
-        Assert.assertTrue(homepage.is_burger_menu_present());
+    public void testAddingAndRemovingProducts() {
         productPage.addAllItemsToCart();
         productPage.openCart();
         productPage.removeAllItemsFromCart();
+        WebDriverManager.takeScreenshot("testaddingandremovingtheproducts");
     }
 
     @AfterClass

@@ -3,33 +3,38 @@ package Pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.util.List;
 
 public class CheckoutPage {
-    WebDriver driver;
-    private static final DecimalFormat df = new DecimalFormat("0.00"); // Formatting for price comparisons
+
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("0.00");
+
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+
+    private final By firstNameField = By.id("first-name");
+    private final By lastNameField = By.id("last-name");
+    private final By zipCodeField = By.id("postal-code");
+    private final By continueButton = By.id("continue");
+    private final By finishButton = By.id("finish");
+    private final By successMessage = By.className("complete-header");
+    private final By backToHome = By.id("back-to-products");
+    private final By totalCartPrice = By.className("inventory_item_price");
+    private final By totalCartSummary = By.className("summary_subtotal_label");
+    private final By totalTax = By.className("summary_tax_label");
+    private final By totalLabel = By.className("summary_total_label");
+    private final By errorMessage = By.cssSelector("h3[data-test='error']");
 
     public CheckoutPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // Locators
-    private By firstNameField = By.id("first-name");
-    private By lastNameField = By.id("last-name");
-    private By zipCodeField = By.id("postal-code");
-    private By continueButton = By.id("continue");
-    private By finishButton = By.id("finish");
-    private By successMessage = By.className("complete-header");
-    private By backToHome = By.id("back-to-products");
-    private By totalCartPrice = By.className("inventory_item_price");
-    private By totalCartSummary = By.className("summary_subtotal_label");
-    private By totalTax = By.className("summary_tax_label");
-    private By totalLabel = By.className("summary_total_label");
-    private By errormessage = By.xpath("//*[@id=\"checkout_info_container\"]/div/form/div[1]/div[4]/h3");
-
-    // Helper function to parse prices
     private double parsePrice(String priceText) {
         try {
             return Double.parseDouble(priceText.replaceAll("[^0-9.]", ""));
@@ -40,24 +45,18 @@ public class CheckoutPage {
     }
 
     public void verifyCheckoutFields(String firstName, String lastName, String zip) {
-        driver.findElement(firstNameField).sendKeys(firstName);
-        driver.findElement(lastNameField).sendKeys(lastName);
-        driver.findElement(zipCodeField).sendKeys(zip);
-        driver.findElement(continueButton).click();
-        String Errormessage = driver.findElement(errormessage).getText();
-        if (Errormessage.equals("Error: First Name is required")) {
-            System.out.println("Every CheckoutField has validation ");
+        enterShippingDetails(firstName, lastName, zip);
+        String validationMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
+        if (validationMessage.equals("Error: First Name is required")) {
+            System.out.println("Checkout fields validation passed");
         }
-
-
     }
 
-
     public void enterShippingDetails(String firstName, String lastName, String zip) {
-        driver.findElement(firstNameField).sendKeys(firstName);
-        driver.findElement(lastNameField).sendKeys(lastName);
-        driver.findElement(zipCodeField).sendKeys(zip);
-        driver.findElement(continueButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameField)).sendKeys(firstName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(lastNameField)).sendKeys(lastName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(zipCodeField)).sendKeys(zip);
+        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
     }
 
     public boolean comparePrice() {
@@ -72,29 +71,29 @@ public class CheckoutPage {
             totalPrice += parsePrice(priceText);
         }
 
-        System.out.println("Calculated Total Price: $ " + df.format(totalPrice));
+        System.out.println("Calculated Total Price: $ " + PRICE_FORMAT.format(totalPrice));
 
-        double total = parsePrice(driver.findElement(totalCartSummary).getText());
-        double tax = parsePrice(driver.findElement(totalTax).getText());
-        double displayedTotal = parsePrice(driver.findElement(totalLabel).getText());
+        double subtotal = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalCartSummary)).getText());
+        double tax = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalTax)).getText());
+        double displayedTotal = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalLabel)).getText());
 
-        double calculatedTotal = total + tax;
-        System.out.println("Expected Total: $" + df.format(calculatedTotal));
-        System.out.println("Displayed Total: $" + df.format(displayedTotal));
+        double calculatedTotal = subtotal + tax;
+        System.out.println("Expected Total: $" + PRICE_FORMAT.format(calculatedTotal));
+        System.out.println("Displayed Total: $" + PRICE_FORMAT.format(displayedTotal));
 
-        // Allow minor floating-point discrepancies
         return Math.abs(calculatedTotal - displayedTotal) < 0.01;
     }
 
     public void completeOrder() {
-        driver.findElement(finishButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(finishButton)).click();
     }
 
     public boolean isOrderSuccessful() {
-        return driver.findElement(successMessage).getText().equalsIgnoreCase("Thank you for your order!");
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage))
+                .getText().equalsIgnoreCase("Thank you for your order!");
     }
 
     public void clickBackToHome() {
-        driver.findElement(backToHome).click();
+        wait.until(ExpectedConditions.elementToBeClickable(backToHome)).click();
     }
 }
