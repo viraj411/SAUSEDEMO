@@ -29,28 +29,21 @@ public class PracClass {
             wait.until(ExpectedConditions.titleContains("Selenium WebDriver"));
             System.out.println("Search results loaded");
 
-            WebDriverManager.takeScreenshot("GoogleSearch");
-
             driver.get(WebDriverManager.BASE_URL);
             System.out.println("Navigated to SauceDemo");
 
             driver.findElement(By.id("user-name")).sendKeys("standard_user");
             driver.findElement(By.id("password")).sendKeys("secret_sauce");
-            WebDriverManager.takeScreenshot("BeforeLogin");
 
             driver.findElement(By.id("login-button")).click();
             wait.until(ExpectedConditions.urlContains("inventory"));
             System.out.println("Login successful");
 
-            WebDriverManager.takeScreenshot("AfterLogin");
-
             WebElement firstProduct = driver.findElement(By.className("inventory_item_name"));
             System.out.println("First product: " + firstProduct.getText());
             firstProduct.click();
 
-            WebDriverManager.takeScreenshot("ProductDetails");
             driver.navigate().back();
-            WebDriverManager.takeScreenshot("FinalInventory");
         } catch (Exception e) {
             System.err.println("Error occurred: " + e.getMessage());
             e.printStackTrace();
