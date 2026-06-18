@@ -5,11 +5,10 @@
     <classes>
       <class name="Tests.SauceDemoTest">
         <methods>
-          <include name="testAddToCart"/>
+          <include name="checkhomepagecontent"/>
           <include name="teardown"/>
           <include name="afterEachTest"/>
           <include name="setup"/>
-          <include name="testCheckout"/>
         </methods>
       </class> <!-- Tests.SauceDemoTest -->
     </classes>

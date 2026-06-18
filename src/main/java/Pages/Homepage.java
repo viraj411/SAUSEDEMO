@@ -23,6 +23,7 @@ public class Homepage {
     private By sortingmenu = By.className("product_sort_container");
     private By socialmediaicons = By.className("social");
     private By footer = By.className("footer_copy");
+    public final String  BASE_URL ="https://www.saucedemo.com/";
 
 
     public void printMenuItemsAndCheckClickable() {
@@ -110,10 +111,12 @@ public class Homepage {
     }
 
     public boolean isFooterDisplayed() {
-       String footerText= driver.findElement(footer).getText();
-       return footerText.equals("© 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
-
-
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement footerElement = wait.until(ExpectedConditions.visibilityOfElementLocated(footer));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", footerElement);
+        String footerText = footerElement.getText().trim();
+        return footerElement.isDisplayed()
+                && footerText.matches("© \\d{4} Sauce Labs\\. All Rights Reserved\\. Terms of Service \\| Privacy Policy");
     }
 
 
