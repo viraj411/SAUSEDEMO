@@ -6,14 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import utils.TestData;
+
 import java.time.Duration;
 import java.util.List;
 
 public class ProductPage {
-
-    private static final String FIRST_PRODUCT_NAME = "Sauce Labs Backpack";
-    private static final String FIRST_PRODUCT_DESCRIPTION =
-            "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.";
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -29,8 +27,8 @@ public class ProductPage {
     private final By itemPrice = By.className("inventory_item_price");
     private final By cartItems = By.className("cart_item");
     private final By backToProductsButton = By.id("back-to-products");
-    private final By firstProductName = By.xpath("//div[normalize-space()='" + FIRST_PRODUCT_NAME + "']");
-    private final By firstProductDescription = By.xpath("//div[normalize-space()='" + FIRST_PRODUCT_DESCRIPTION + "']");
+    private final By firstProductName = By.xpath("//div[normalize-space()='" + TestData.FIRST_PRODUCT_NAME + "']");
+    private final By firstProductDescription = By.xpath("//div[normalize-space()='" + TestData.FIRST_PRODUCT_DESCRIPTION + "']");
 
     public ProductPage(WebDriver driver) {
         this.driver = driver;
@@ -91,7 +89,7 @@ public class ProductPage {
         System.out.println(productName);
         System.out.println(productDescription);
 
-        if (FIRST_PRODUCT_NAME.equals(productName) && FIRST_PRODUCT_DESCRIPTION.equals(productDescription)) {
+        if (TestData.FIRST_PRODUCT_NAME.equals(productName) && TestData.FIRST_PRODUCT_DESCRIPTION.equals(productDescription)) {
             wait.until(ExpectedConditions.elementToBeClickable(backToProductsButton)).click();
         } else {
             System.out.println("Product details do not match");
@@ -100,7 +98,7 @@ public class ProductPage {
 
     public boolean verifyProductPageTitle() {
         String title = wait.until(ExpectedConditions.visibilityOfElementLocated(productPageTitle)).getText();
-        return "Products".equals(title);
+        return TestData.EXPECTED_PRODUCTS_TITLE.equals(title);
     }
 
     public boolean verifyCartItemCountAfterAddingProduct() {

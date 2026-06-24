@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import utils.TestData;
 import utils.WebDriverManager;
 
 public class SauceDemoTest {
@@ -24,7 +25,7 @@ public class SauceDemoTest {
     @BeforeClass
     public void setup() {
         driver = WebDriverManager.getDriver();
-        driver.get(WebDriverManager.BASE_URL);
+        driver.get(TestData.BASE_URL);
         loginPage = new LoginPage(driver);
         productPage = new ProductPage(driver);
         cartPage = new CartPage(driver);
@@ -34,8 +35,8 @@ public class SauceDemoTest {
 
     @Test(priority = 1)
     public void testLogin() {
-        loginPage.validLogin("standard_user", "secret_sauce");
-        Assert.assertEquals(driver.getTitle(), "Swag Labs");
+        loginPage.validLogin(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
+        Assert.assertEquals(driver.getTitle(), TestData.EXPECTED_HOME_TITLE);
         System.out.println("Login successful");
     }
 
@@ -66,7 +67,10 @@ public class SauceDemoTest {
     public void testCheckout() {
         cartPage.clickCheckout();
         checkoutPage.verifyCheckoutFields("", "", "");
-        checkoutPage.enterShippingDetails("Viraj", "Abhang", "422605");
+        checkoutPage.enterShippingDetails(
+                TestData.SHIPPING_FIRST_NAME,
+                TestData.SHIPPING_LAST_NAME,
+                TestData.SHIPPING_ZIP_CODE);
         Assert.assertTrue(checkoutPage.comparePrice());
         checkoutPage.completeOrder();
         Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order was not successful!");

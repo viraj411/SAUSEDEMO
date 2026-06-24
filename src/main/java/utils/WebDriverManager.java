@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class WebDriverManager {
 
-    public static final String BASE_URL = "https://www.saucedemo.com/";
-
     private static WebDriver driver;
 
     public static WebDriver getDriver() {

@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import utils.TestData;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +90,7 @@ public class Homepage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", footerElement);
         String footerText = footerElement.getText().trim();
         return footerElement.isDisplayed()
-                && footerText.matches("© \\d{4} Sauce Labs\\. All Rights Reserved\\. Terms of Service \\| Privacy Policy");
+                && footerText.matches(TestData.FOOTER_TEXT_PATTERN);
     }
 
     public void checkSortingByAlphabets() {

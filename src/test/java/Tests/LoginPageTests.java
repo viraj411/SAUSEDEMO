@@ -7,6 +7,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.TestData;
 import utils.WebDriverManager;
 
 public class LoginPageTests {
@@ -17,26 +18,26 @@ public class LoginPageTests {
     @BeforeClass
     public void setup() {
         driver = WebDriverManager.getDriver();
-        driver.get(WebDriverManager.BASE_URL);
+        driver.get(TestData.BASE_URL);
         loginPage = new LoginPage(driver);
     }
 
     @BeforeMethod
     public void navigateToLoginPage() {
-        driver.get(WebDriverManager.BASE_URL);
+        driver.get(TestData.BASE_URL);
     }
 
     @Test(priority = 1)
     public void testValidLogin() {
-        loginPage.validLogin("standard_user", "secret_sauce");
-        Assert.assertEquals(driver.getTitle(), "Swag Labs");
+        loginPage.validLogin(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
+        Assert.assertEquals(driver.getTitle(), TestData.EXPECTED_HOME_TITLE);
         System.out.println("Login successful");
         loginPage.logout();
     }
 
     @Test(priority = 2)
     public void testInvalidLogin() {
-        Assert.assertTrue(loginPage.invalidLogin("Admin@123", "Wigzo@123"));
+        Assert.assertTrue(loginPage.invalidLogin(TestData.INVALID_USERNAME, TestData.INVALID_PASSWORD));
         System.out.println("Invalid login validated");
     }
 
