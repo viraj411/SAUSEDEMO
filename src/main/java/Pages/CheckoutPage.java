@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import utils.TestData;
+
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.List;
@@ -47,7 +49,7 @@ public class CheckoutPage {
     public void verifyCheckoutFields(String firstName, String lastName, String zip) {
         enterShippingDetails(firstName, lastName, zip);
         String validationMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
-        if (validationMessage.equals("Error: First Name is required")) {
+        if (validationMessage.equals(TestData.CHECKOUT_FIRST_NAME_REQUIRED)) {
             System.out.println("Checkout fields validation passed");
         }
     }
@@ -90,7 +92,7 @@ public class CheckoutPage {
 
     public boolean isOrderSuccessful() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage))
-                .getText().equalsIgnoreCase("Thank you for your order!");
+                .getText().equalsIgnoreCase(TestData.ORDER_SUCCESS_MESSAGE);
     }
 
     public void clickBackToHome() {

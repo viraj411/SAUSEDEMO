@@ -6,12 +6,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import utils.TestData;
+
 import java.time.Duration;
 
 public class LoginPage {
-
-    private static final String INVALID_CREDENTIALS_MESSAGE =
-            "Epic sadface: Username and password do not match any user in this service";
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -44,18 +43,18 @@ public class LoginPage {
         submitCredentials(username, password);
         String errorMessageText = getErrorMessageText();
         clearLoginFields();
-        return errorMessageText.equals(INVALID_CREDENTIALS_MESSAGE);
+        return errorMessageText.equals(TestData.INVALID_CREDENTIALS_MESSAGE);
     }
 
     public boolean validateLoginWithEmptyPassword() {
-        submitCredentials("standard_user", "");
+        submitCredentials(TestData.VALID_USERNAME, "");
         String errorMessageText = getErrorMessageText();
         clearLoginFields();
         return errorMessageText.toLowerCase().contains("password");
     }
 
     public boolean validateLoginWithEmptyUsername() {
-        submitCredentials("", "secret_sauce");
+        submitCredentials("", TestData.VALID_PASSWORD);
         String errorMessageText = getErrorMessageText();
         clearLoginFields();
         return errorMessageText.contains("Username");
