@@ -11,6 +11,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <allure.version>2.29.0</allure.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,12 @@
             <version>7.10.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -37,6 +44,17 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
                 </configuration>
             </plugin>
             <plugin>

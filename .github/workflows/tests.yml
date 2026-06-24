@@ -4,6 +4,15 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -27,10 +36,72 @@ jobs:
       - name: Run tests
         run: mvn -B clean test
 
-      - name: Upload test reports
+      - name: Add Allure executor info
+        if: always()
+        run: |
+          mkdir -p target/allure-results
+          cat > target/allure-results/executor.json <<EOF
+          {
+            "reportName": "SauceDemo Automation",
+            "buildOrder": "${{ github.run_number }}",
+            "buildName": "GitHub Actions #${{ github.run_number }}",
+            "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/",
+            "type": "github"
+          }
+          EOF
+
+      - name: Generate Allure HTML report
+        if: always()
+        uses: simple-elf/allure-report-action@v1.7
+        with:
+          allure_results: target/allure-results
+          allure_report: allure-report
+
+      - name: Upload Allure report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports
+          name: allure-report-${{ github.run_number }}
+          path: allure-report/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload Allure results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ github.run_number }}
+          path: target/allure-results/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-${{ github.run_number }}
           path: target/surefire-reports/
           if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Deploy Allure report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report
+          publish_branch: gh-pages
+          force_orphan: true
+
+      - name: Publish report links
+        if: always()
+        run: |
+          {
+            echo "### Allure Report"
+            echo ""
+            echo "View the latest HTML report on GitHub Pages:"
+            echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+            echo ""
+            echo "Download this run's report from the **allure-report-${{ github.run_number }}** artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
