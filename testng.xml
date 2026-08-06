@@ -1,4 +1,7 @@
 <suite name="SauceDemoSuite">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
     <test name="E2E Test">
         <classes>
             <class name="Tests.LoginPageTests"/>

@@ -12,6 +12,8 @@ import java.time.Duration;
 
 public class LoginPage {
 
+    private static final Duration TIMEOUT = Duration.ofSeconds(10);
+
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -24,67 +26,83 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, TIMEOUT);
     }
 
     public void validLogin(String username, String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        submitCredentials(username, password);
     }
 
     public void logout() {
-        wait.until(ExpectedConditions.elementToBeClickable(burgerMenuButton)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
+        click(burgerMenuButton);
+        click(logoutLink);
         System.out.println("Logged out successfully");
     }
 
     public boolean invalidLogin(String username, String password) {
-        submitCredentials(username, password);
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.equals(TestData.INVALID_CREDENTIALS_MESSAGE);
+        return errorAfterLogin(username, password).equals(TestData.INVALID_CREDENTIALS_MESSAGE);
     }
 
     public boolean validateLoginWithEmptyPassword() {
-        submitCredentials(TestData.VALID_USERNAME, "");
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.toLowerCase().contains("password");
+        return mentionsPassword(errorAfterLogin(TestData.VALID_USERNAME, ""));
     }
 
     public boolean validateLoginWithEmptyUsername() {
-        submitCredentials("", TestData.VALID_PASSWORD);
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.contains("Username");
+        return mentionsUsername(errorAfterLogin("", TestData.VALID_PASSWORD));
     }
 
     public boolean validateLoginWithEmptyUsernameAndPassword() {
-        submitCredentials("", "");
+        String error = errorAfterLogin("", "");
+        return mentionsUsername(error) || mentionsPassword(error);
+    }
+
+    /**
+     * Submits the given credentials, returns the resulting error text and leaves
+     * the form empty so the next attempt starts from a clean state.
+     */
+    private String errorAfterLogin(String username, String password) {
+        submitCredentials(username, password);
         String errorMessageText = getErrorMessageText();
-        return errorMessageText.contains("Username") || errorMessageText.toLowerCase().contains("password");
+        clearLoginFields();
+        return errorMessageText;
     }
 
     private void submitCredentials(String username, String password) {
-        WebElement usernameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-        WebElement passwordElement = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField));
-        usernameElement.clear();
-        passwordElement.clear();
-        usernameElement.sendKeys(username);
-        passwordElement.sendKeys(password);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        type(usernameField, username);
+        type(passwordField, password);
+        click(loginButton);
     }
 
     private String getErrorMessageText() {
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        String errorMessageText = errorElement.getText();
+        String errorMessageText = visible(errorMessage).getText();
         System.out.println(errorMessageText);
         return errorMessageText;
     }
 
     private void clearLoginFields() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
+        visible(usernameField).clear();
+        visible(passwordField).clear();
+    }
+
+    private void type(By locator, String text) {
+        WebElement element = visible(locator);
+        element.clear();
+        element.sendKeys(text);
+    }
+
+    private void click(By locator) {
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    }
+
+    private WebElement visible(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    private boolean mentionsUsername(String errorMessageText) {
+        return errorMessageText.contains("Username");
+    }
+
+    private boolean mentionsPassword(String errorMessageText) {
+        return errorMessageText.toLowerCase().contains("password");
     }
 }
