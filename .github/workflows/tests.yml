@@ -3,16 +3,23 @@ name: VIRAJ'S AUTOMATION PROJECT
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+
+concurrency:
+  group: allure-pages
+  cancel-in-progress: false
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    outputs:
+      report_url: ${{ steps.metadata.outputs.report_url }}
+      pages_ready: ${{ steps.stage.outputs.ready }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,27 +41,42 @@ jobs:
         run: mvn -B clean test
         continue-on-error: true
 
+      - name: Add branch and run id to the report
+        id: metadata
+        if: always()
+        run: python3 .github/scripts/prepare_allure_metadata.py
+
       - name: Build Allure report
         if: always()
         run: mvn -B allure:report
 
       - name: Summarize each test
         if: always()
+        env:
+          REPORT_URL: ${{ steps.metadata.outputs.report_url }}
         run: python3 .github/scripts/allure_summary.py
 
       - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-${{ github.run_id }}
           path: target/site/allure-maven-plugin
           if-no-files-found: error
 
+      - name: Stage report at branch and run id
+        id: stage
+        if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        env:
+          SAFE_BRANCH: ${{ steps.metadata.outputs.safe_branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/stage_pages_report.py
+
       - name: Upload GitHub Pages artifact
-        if: always() && github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        if: steps.stage.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/site/allure-maven-plugin
+          path: site-publish
 
       - name: Fail if tests failed
         if: steps.tests.outcome == 'failure'
@@ -62,14 +84,11 @@ jobs:
 
   deploy-report:
     needs: test
-    if: always() && needs.test.result != 'cancelled' && github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    if: always() && needs.test.result != 'cancelled' && needs.test.outputs.pages_ready == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    concurrency:
-      group: allure-pages
-      cancel-in-progress: true
     steps:
       - name: Deploy Allure report to GitHub Pages
         id: deployment
@@ -79,4 +98,4 @@ jobs:
         run: |
           echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ needs.test.outputs.report_url }}" >> "$GITHUB_STEP_SUMMARY"

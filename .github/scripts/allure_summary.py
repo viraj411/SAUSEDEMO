@@ -50,13 +50,10 @@ else:
         lines.append(
             f"| {index} | {cell(row['suite'])} | {cell(title)} | {cell(row['status'])} | {row['seconds']:.1f}s |"
         )
-    lines.extend(
-        [
-            "",
-            "The full Allure report is attached to this run as the **allure-report** artifact.",
-            "Open `index.html` inside it. Pushes to the default branch also publish that report to GitHub Pages.",
-        ]
-    )
+    report_url = os.environ.get("REPORT_URL", "").strip()
+    lines.extend(["", "The full Allure report is attached to this run as an artifact."])
+    if report_url:
+        lines.append(f"Report URL: {report_url}")
 
 text = "\n".join(lines) + "\n"
 if summary_path:
