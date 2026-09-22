@@ -1,7 +1,26 @@
 <suite name="SauceDemoSuite">
-    <test name="E2E Test">
+    <test name="Login">
         <classes>
             <class name="Tests.LoginPageTests"/>
+        </classes>
+    </test>
+    <test name="Homepage">
+        <classes>
+            <class name="Tests.HomepageTests"/>
+        </classes>
+    </test>
+    <test name="Cart">
+        <classes>
+            <class name="Tests.CartTests"/>
+        </classes>
+    </test>
+    <test name="Checkout">
+        <classes>
+            <class name="Tests.CheckoutTests"/>
+        </classes>
+    </test>
+    <test name="E2E Test">
+        <classes>
             <class name="Tests.SauceDemoTest"/>
         </classes>
     </test>
