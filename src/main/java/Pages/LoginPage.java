@@ -1,90 +1,68 @@
 package Pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import utils.TestData;
-
-import java.time.Duration;
-
-public class LoginPage {
-
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class LoginPage extends BasePage {
 
     private final By usernameField = By.id("user-name");
     private final By passwordField = By.id("password");
     private final By loginButton = By.id("login-button");
     private final By errorMessage = By.cssSelector("h3[data-test='error']");
+    private final By errorCloseButton = By.className("error-button");
     private final By burgerMenuButton = By.id("react-burger-menu-btn");
     private final By logoutLink = By.id("logout_sidebar_link");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
     }
 
-    public void validLogin(String username, String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+    public void login(String username, String password) {
+        type(usernameField, username);
+        type(passwordField, password);
+        click(loginButton);
+    }
+
+    public String loginAndGetError(String username, String password) {
+        login(username, password);
+        return textOf(errorMessage);
     }
 
     public void logout() {
-        wait.until(ExpectedConditions.elementToBeClickable(burgerMenuButton)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
-        System.out.println("Logged out successfully");
+        click(burgerMenuButton);
+        click(logoutLink);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
     }
 
-    public boolean invalidLogin(String username, String password) {
-        submitCredentials(username, password);
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.equals(TestData.INVALID_CREDENTIALS_MESSAGE);
+    public void dismissError() {
+        click(errorCloseButton);
     }
 
-    public boolean validateLoginWithEmptyPassword() {
-        submitCredentials(TestData.VALID_USERNAME, "");
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.toLowerCase().contains("password");
+    public boolean isLoginFormDisplayed() {
+        return isVisible(usernameField) && isVisible(passwordField) && isVisible(loginButton);
     }
 
-    public boolean validateLoginWithEmptyUsername() {
-        submitCredentials("", TestData.VALID_PASSWORD);
-        String errorMessageText = getErrorMessageText();
-        clearLoginFields();
-        return errorMessageText.contains("Username");
+    public boolean isErrorDisplayed() {
+        return isDisplayed(errorMessage);
     }
 
-    public boolean validateLoginWithEmptyUsernameAndPassword() {
-        submitCredentials("", "");
-        String errorMessageText = getErrorMessageText();
-        return errorMessageText.contains("Username") || errorMessageText.toLowerCase().contains("password");
+    public boolean isOnInventoryPage() {
+        return driver.getCurrentUrl().contains("inventory");
     }
 
-    private void submitCredentials(String username, String password) {
-        WebElement usernameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-        WebElement passwordElement = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField));
-        usernameElement.clear();
-        passwordElement.clear();
-        usernameElement.sendKeys(username);
-        passwordElement.sendKeys(password);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+    public String getPasswordFieldType() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).getAttribute("type");
     }
 
-    private String getErrorMessageText() {
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        String errorMessageText = errorElement.getText();
-        System.out.println(errorMessageText);
-        return errorMessageText;
-    }
-
-    private void clearLoginFields() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
+    private boolean isVisible(By locator) {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            return element.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 }

@@ -1,115 +1,109 @@
 package Pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import utils.TestData;
-
-import java.time.Duration;
 import java.util.List;
 
-public class ProductPage {
+public class ProductPage extends BasePage {
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
-    private double totalPrice;
-
-    private final By productPageTitle = By.className("title");
-    private final By addBackpackToCartButton = By.id("add-to-cart-sauce-labs-backpack");
-    private final By cartIcon = By.id("shopping_cart_container");
-    private final By addToCartButton = By.xpath(".//button[starts-with(@id, 'add-to-cart')]");
-    private final By removeCartItemsButton = By.xpath(".//button[starts-with(@id, 'remove')]");
-    private final By inventoryItems = By.className("inventory_item");
-    private final By itemName = By.className("inventory_item_label");
-    private final By itemPrice = By.className("inventory_item_price");
-    private final By cartItems = By.className("cart_item");
-    private final By backToProductsButton = By.id("back-to-products");
-    private final By firstProductName = By.xpath("//div[normalize-space()='" + TestData.FIRST_PRODUCT_NAME + "']");
-    private final By firstProductDescription = By.xpath("//div[normalize-space()='" + TestData.FIRST_PRODUCT_DESCRIPTION + "']");
+    private static final By CART_ICON = By.id("shopping_cart_container");
+    private static final By CART_TITLE = By.className("title");
+    private static final By CART_BADGE = By.className("shopping_cart_badge");
+    private static final By INVENTORY_ADD_BUTTONS = By.cssSelector(".inventory_item button[id^='add-to-cart']");
+    private static final By DETAILS_NAME = By.className("inventory_details_name");
+    private static final By DETAILS_DESCRIPTION = By.className("inventory_details_desc");
+    private static final By DETAILS_PRICE = By.className("inventory_details_price");
+    private static final By DETAILS_ADD_BUTTON = By.id("add-to-cart");
+    private static final By DETAILS_REMOVE_BUTTON = By.id("remove");
+    private static final By BACK_TO_PRODUCTS_BUTTON = By.id("back-to-products");
+    private static final String CART_PAGE_TITLE = "Your Cart";
 
     public ProductPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
     }
 
-    public void addSingleItemToCart() {
-        driver.findElement(addBackpackToCartButton).click();
+    public void openProduct(String productName) {
+        click(By.linkText(productName));
     }
 
-    public void openCart() {
-        driver.findElement(cartIcon).click();
+    public String getDetailsName() {
+        return textOf(DETAILS_NAME);
+    }
+
+    public String getDetailsDescription() {
+        return textOf(DETAILS_DESCRIPTION);
+    }
+
+    public String getDetailsPrice() {
+        return textOf(DETAILS_PRICE);
+    }
+
+    public void backToProducts() {
+        click(BACK_TO_PRODUCTS_BUTTON);
+        waitForUrlToContain("inventory.html");
+    }
+
+    public void addItem(String slug) {
+        click(By.id("add-to-cart-" + slug));
+    }
+
+    public void addItemFromDetails() {
+        click(DETAILS_ADD_BUTTON);
+    }
+
+    public void removeItem(String slug) {
+        click(By.id("remove-" + slug));
     }
 
     public void addAllItemsToCart() {
-        List<WebElement> items = driver.findElements(inventoryItems);
-        System.out.println("Total items found: " + items.size());
-        totalPrice = 0;
+        int remaining = driver.findElements(INVENTORY_ADD_BUTTONS).size();
+        while (remaining > 0) {
+            click(INVENTORY_ADD_BUTTONS);
+            int previous = remaining;
+            remaining = countDecreased(INVENTORY_ADD_BUTTONS, previous);
+        }
+    }
 
-        for (WebElement item : items) {
-            String name = item.findElement(itemName).getText();
-            String price = item.findElement(itemPrice).getText();
-            WebElement addToCart = item.findElement(addToCartButton);
+    public String getCartButtonText(String slug) {
+        return buttonText(By.id("remove-" + slug), By.id("add-to-cart-" + slug));
+    }
 
-            wait.until(ExpectedConditions.elementToBeClickable(addToCart)).click();
-            System.out.println("Added to Cart: " + name.substring(0, Math.min(name.length(), 20)) + " - " + price);
+    public String getDetailsCartButtonText() {
+        return buttonText(DETAILS_REMOVE_BUTTON, DETAILS_ADD_BUTTON);
+    }
 
+    public void openCart() {
+        click(CART_ICON);
+        waitForUrlToContain("cart.html");
+        wait.until(driver -> {
             try {
-                totalPrice += Double.parseDouble(price.replaceAll("[^0-9.]", ""));
-            } catch (NumberFormatException e) {
-                System.out.println("Error parsing price: " + price);
+                return CART_PAGE_TITLE.equals(driver.findElement(CART_TITLE).getText().trim());
+            } catch (StaleElementReferenceException e) {
+                return false;
             }
+        });
+    }
+
+    public void waitForCartBadgeCount(int expectedCount) {
+        wait.until(driver -> getCartBadgeCount() == expectedCount);
+    }
+
+    public int getCartBadgeCount() {
+        List<WebElement> badges = driver.findElements(CART_BADGE);
+        if (badges.isEmpty() || !badges.get(0).isDisplayed()) {
+            return 0;
         }
-
-        System.out.println("Total price of the products is " + totalPrice);
+        String badgeText = badges.get(0).getText().trim();
+        return badgeText.isEmpty() ? 0 : Integer.parseInt(badgeText);
     }
 
-    public void removeAllItemsFromCart() {
-        List<WebElement> items = driver.findElements(cartItems);
-        System.out.println("Total items found in the cart: " + items.size());
-
-        for (WebElement item : items) {
-            WebElement removeButton = item.findElement(removeCartItemsButton);
-            wait.until(ExpectedConditions.elementToBeClickable(removeButton)).click();
+    private String buttonText(By removeButton, By addButton) {
+        if (isDisplayed(removeButton)) {
+            return textOf(removeButton);
         }
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void checkProductDetails() {
-        wait.until(ExpectedConditions.elementToBeClickable(firstProductName)).click();
-
-        String productName = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProductName)).getText();
-        String productDescription = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProductDescription)).getText();
-
-        System.out.println(productName);
-        System.out.println(productDescription);
-
-        if (TestData.FIRST_PRODUCT_NAME.equals(productName) && TestData.FIRST_PRODUCT_DESCRIPTION.equals(productDescription)) {
-            wait.until(ExpectedConditions.elementToBeClickable(backToProductsButton)).click();
-        } else {
-            System.out.println("Product details do not match");
-        }
-    }
-
-    public boolean verifyProductPageTitle() {
-        String title = wait.until(ExpectedConditions.visibilityOfElementLocated(productPageTitle)).getText();
-        return TestData.EXPECTED_PRODUCTS_TITLE.equals(title);
-    }
-
-    public boolean verifyCartItemCountAfterAddingProduct() {
-        driver.findElement(addBackpackToCartButton).click();
-        int cartItemCount = Integer.parseInt(driver.findElement(cartIcon).getText().trim());
-        System.out.println("Cart item quantity is: " + cartItemCount);
-
-        if (cartItemCount == 1) {
-            driver.findElement(removeCartItemsButton).click();
-        }
-
-        return cartItemCount == 1;
+        return textOf(addButton);
     }
 }

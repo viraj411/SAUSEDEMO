@@ -4,98 +4,156 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import utils.TestData;
-
-import java.text.DecimalFormat;
-import java.time.Duration;
 import java.util.List;
 
-public class CheckoutPage {
+public class CheckoutPage extends BasePage {
 
-    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("0.00");
-
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+    private static final double PRICE_TOLERANCE = 0.01;
 
     private final By firstNameField = By.id("first-name");
     private final By lastNameField = By.id("last-name");
     private final By zipCodeField = By.id("postal-code");
     private final By continueButton = By.id("continue");
     private final By finishButton = By.id("finish");
-    private final By successMessage = By.className("complete-header");
-    private final By backToHome = By.id("back-to-products");
-    private final By totalCartPrice = By.className("inventory_item_price");
-    private final By totalCartSummary = By.className("summary_subtotal_label");
-    private final By totalTax = By.className("summary_tax_label");
-    private final By totalLabel = By.className("summary_total_label");
+    private final By cancelButton = By.id("cancel");
     private final By errorMessage = By.cssSelector("h3[data-test='error']");
+    private final By errorCloseButton = By.className("error-button");
+    private final By pageTitle = By.className("title");
+    private final By itemPrices = By.className("inventory_item_price");
+    private final By itemNames = By.className("inventory_item_name");
+    private final By subtotalLabel = By.className("summary_subtotal_label");
+    private final By taxLabel = By.className("summary_tax_label");
+    private final By totalLabel = By.className("summary_total_label");
+    private final By summaryValues = By.className("summary_value_label");
+    private final By successMessage = By.className("complete-header");
+    private final By dispatchMessage = By.className("complete-text");
+    private final By backToHome = By.id("back-to-products");
 
     public CheckoutPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
-
-    private double parsePrice(String priceText) {
-        try {
-            return Double.parseDouble(priceText.replaceAll("[^0-9.]", ""));
-        } catch (NumberFormatException e) {
-            System.err.println("Error: Could not parse price - '" + priceText + "'");
-            return 0.0;
-        }
-    }
-
-    public void verifyCheckoutFields(String firstName, String lastName, String zip) {
-        enterShippingDetails(firstName, lastName, zip);
-        String validationMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
-        if (validationMessage.equals(TestData.CHECKOUT_FIRST_NAME_REQUIRED)) {
-            System.out.println("Checkout fields validation passed");
-        }
+        super(driver);
     }
 
     public void enterShippingDetails(String firstName, String lastName, String zip) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameField)).sendKeys(firstName);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(lastNameField)).sendKeys(lastName);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(zipCodeField)).sendKeys(zip);
-        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
+        type(firstNameField, firstName);
+        type(lastNameField, lastName);
+        type(zipCodeField, zip);
+        click(continueButton);
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.visibilityOfElementLocated(errorMessage),
+                ExpectedConditions.urlContains("checkout-step-two")));
     }
 
-    public boolean comparePrice() {
-        List<WebElement> items = driver.findElements(totalCartPrice);
-        double totalPrice = 0.0;
+    public String getPageTitle() {
+        return stableText(pageTitle);
+    }
 
-        System.out.println("Total items found: " + items.size());
+    public boolean areShippingFieldsDisplayed() {
+        return isDisplayed(firstNameField)
+                && isDisplayed(lastNameField)
+                && isDisplayed(zipCodeField)
+                && isDisplayed(continueButton);
+    }
 
-        for (WebElement item : items) {
-            String priceText = item.getText().trim();
-            System.out.println("Raw price text: '" + priceText + "'");
-            totalPrice += parsePrice(priceText);
+    public String getErrorText() {
+        return textOf(errorMessage);
+    }
+
+    public boolean isErrorDisplayed() {
+        return isDisplayed(errorMessage);
+    }
+
+    public void dismissError() {
+        click(errorCloseButton);
+    }
+
+    public String getFirstNameValue() {
+        return valueOf(firstNameField);
+    }
+
+    public String getLastNameValue() {
+        return valueOf(lastNameField);
+    }
+
+    public String getZipCodeValue() {
+        return valueOf(zipCodeField);
+    }
+
+    public void clickCancel() {
+        click(cancelButton);
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("checkout-step")));
+    }
+
+    public List<String> getOverviewItemNames() {
+        waitForUrlToContain("checkout-step-two");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(itemNames));
+        return visibleTexts(itemNames);
+    }
+
+    public List<String> getSummaryValues() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(summaryValues));
+        return visibleTexts(summaryValues);
+    }
+
+    public double getItemsTotal() {
+        double total = 0.0;
+        for (WebElement item : driver.findElements(itemPrices)) {
+            total += parsePrice(item.getText());
         }
+        return total;
+    }
 
-        System.out.println("Calculated Total Price: $ " + PRICE_FORMAT.format(totalPrice));
+    public double getSubtotal() {
+        return parsePrice(textOf(subtotalLabel));
+    }
 
-        double subtotal = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalCartSummary)).getText());
-        double tax = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalTax)).getText());
-        double displayedTotal = parsePrice(wait.until(ExpectedConditions.visibilityOfElementLocated(totalLabel)).getText());
+    public double getTax() {
+        return parsePrice(textOf(taxLabel));
+    }
 
-        double calculatedTotal = subtotal + tax;
-        System.out.println("Expected Total: $" + PRICE_FORMAT.format(calculatedTotal));
-        System.out.println("Displayed Total: $" + PRICE_FORMAT.format(displayedTotal));
+    public double getDisplayedTotal() {
+        return parsePrice(textOf(totalLabel));
+    }
 
-        return Math.abs(calculatedTotal - displayedTotal) < 0.01;
+    public boolean doesSubtotalMatchItems() {
+        return Math.abs(getItemsTotal() - getSubtotal()) < PRICE_TOLERANCE;
+    }
+
+    public boolean isTotalConsistent() {
+        return Math.abs((getSubtotal() + getTax()) - getDisplayedTotal()) < PRICE_TOLERANCE;
+    }
+
+    public boolean isFinishButtonDisplayed() {
+        return isDisplayed(finishButton);
     }
 
     public void completeOrder() {
-        wait.until(ExpectedConditions.elementToBeClickable(finishButton)).click();
+        click(finishButton);
+        waitForUrlToContain("checkout-complete");
     }
 
-    public boolean isOrderSuccessful() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage))
-                .getText().equalsIgnoreCase(TestData.ORDER_SUCCESS_MESSAGE);
+    public String getSuccessMessage() {
+        return textOf(successMessage);
+    }
+
+    public String getDispatchMessage() {
+        return textOf(dispatchMessage);
     }
 
     public void clickBackToHome() {
-        wait.until(ExpectedConditions.elementToBeClickable(backToHome)).click();
+        click(backToHome);
+        waitForUrlToContain("inventory.html");
+    }
+
+    private String valueOf(By field) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(field)).getAttribute("value");
+    }
+
+    private double parsePrice(String priceText) {
+        String numeric = priceText.replaceAll("[^0-9.]", "");
+        if (numeric.isEmpty()) {
+            throw new IllegalArgumentException("No price found in '" + priceText + "'");
+        }
+        return Double.parseDouble(numeric);
     }
 }

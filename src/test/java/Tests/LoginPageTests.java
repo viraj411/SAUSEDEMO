@@ -1,63 +1,133 @@
 package Tests;
 
 import Pages.LoginPage;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.TestData;
-import utils.WebDriverManager;
 
-public class LoginPageTests {
+public class LoginPageTests extends BaseTest {
 
-    private WebDriver driver;
     private LoginPage loginPage;
 
     @BeforeClass
-    public void setup() {
-        driver = WebDriverManager.getDriver();
-        driver.get(TestData.BASE_URL);
+    public void initPage() {
         loginPage = new LoginPage(driver);
     }
 
     @BeforeMethod
     public void navigateToLoginPage() {
         driver.get(TestData.BASE_URL);
+        if (loginPage.isOnInventoryPage()) {
+            loginPage.logout();
+        }
     }
 
-    @Test(priority = 1)
-    public void testValidLogin() {
-        loginPage.validLogin(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
+    @Test(description = "Login form shows username, password, and the login button")
+    public void testLoginFormIsDisplayed() {
+        Assert.assertTrue(loginPage.isLoginFormDisplayed());
         Assert.assertEquals(driver.getTitle(), TestData.EXPECTED_HOME_TITLE);
-        System.out.println("Login successful");
+    }
+
+    @Test(description = "Password characters are masked")
+    public void testPasswordFieldIsMasked() {
+        Assert.assertEquals(loginPage.getPasswordFieldType(), "password");
+    }
+
+    @Test(description = "Valid credentials land on the inventory page")
+    public void testValidLogin() {
+        loginPage.login(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
+        Assert.assertEquals(driver.getTitle(), TestData.EXPECTED_HOME_TITLE);
+        Assert.assertTrue(loginPage.isOnInventoryPage());
+    }
+
+    @Test(description = "Refreshing the inventory page keeps the logged-in session")
+    public void testSessionSurvivesRefresh() {
+        loginPage.login(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
+        driver.navigate().refresh();
+        Assert.assertTrue(loginPage.isOnInventoryPage());
+    }
+
+    @Test(description = "Logout returns the user to the login form")
+    public void testLogoutReturnsToLoginForm() {
+        loginPage.login(TestData.VALID_USERNAME, TestData.VALID_PASSWORD);
         loginPage.logout();
+        Assert.assertTrue(loginPage.isLoginFormDisplayed());
+        Assert.assertFalse(loginPage.isOnInventoryPage());
     }
 
-    @Test(priority = 2)
+    @Test(description = "Inventory cannot be opened without a session")
+    public void testInventoryRedirectsWhenLoggedOut() {
+        driver.get(TestData.INVENTORY_URL);
+        Assert.assertTrue(loginPage.isLoginFormDisplayed());
+        Assert.assertFalse(loginPage.isOnInventoryPage());
+    }
+
+    @Test(description = "Unknown username and password show the mismatch error")
     public void testInvalidLogin() {
-        Assert.assertTrue(loginPage.invalidLogin(TestData.INVALID_USERNAME, TestData.INVALID_PASSWORD));
-        System.out.println("Invalid login validated");
+        Assert.assertEquals(
+                loginPage.loginAndGetError(TestData.INVALID_USERNAME, TestData.INVALID_PASSWORD),
+                TestData.INVALID_CREDENTIALS_MESSAGE);
+        Assert.assertFalse(loginPage.isOnInventoryPage());
     }
 
-    @Test(priority = 3)
+    @Test(description = "A valid username with the wrong password is rejected")
+    public void testWrongPasswordOnly() {
+        Assert.assertEquals(
+                loginPage.loginAndGetError(TestData.VALID_USERNAME, TestData.WRONG_PASSWORD),
+                TestData.INVALID_CREDENTIALS_MESSAGE);
+    }
+
+    @Test(description = "A wrong username with the valid password is rejected")
+    public void testWrongUsernameOnly() {
+        Assert.assertEquals(
+                loginPage.loginAndGetError(TestData.INVALID_USERNAME, TestData.VALID_PASSWORD),
+                TestData.INVALID_CREDENTIALS_MESSAGE);
+    }
+
+    @Test(description = "Whitespace around the username is not trimmed into a valid login")
+    public void testUsernameWithSurroundingSpaces() {
+        Assert.assertEquals(
+                loginPage.loginAndGetError(" " + TestData.VALID_USERNAME + " ", TestData.VALID_PASSWORD),
+                TestData.INVALID_CREDENTIALS_MESSAGE);
+    }
+
+    @Test(description = "A locked account shows the locked-out error")
+    public void testLockedOutUser() {
+        Assert.assertEquals(
+                loginPage.loginAndGetError(TestData.LOCKED_OUT_USERNAME, TestData.VALID_PASSWORD),
+                TestData.LOCKED_OUT_MESSAGE);
+        Assert.assertFalse(loginPage.isOnInventoryPage());
+    }
+
+    @Test(description = "A blank password asks for the password")
     public void testLoginWithBlankPassword() {
-        Assert.assertTrue(loginPage.validateLoginWithEmptyPassword());
+        Assert.assertEquals(
+                loginPage.loginAndGetError(TestData.VALID_USERNAME, ""),
+                TestData.PASSWORD_REQUIRED_MESSAGE);
     }
 
-    @Test(priority = 4)
+    @Test(description = "A blank username asks for the username")
     public void testLoginWithBlankUsername() {
-        Assert.assertTrue(loginPage.validateLoginWithEmptyUsername());
+        Assert.assertEquals(
+                loginPage.loginAndGetError("", TestData.VALID_PASSWORD),
+                TestData.USERNAME_REQUIRED_MESSAGE);
     }
 
-    @Test(priority = 5)
+    @Test(description = "Blank username and password report the username first")
     public void testLoginWithBlankUsernameAndPassword() {
-        Assert.assertTrue(loginPage.validateLoginWithEmptyUsernameAndPassword());
+        Assert.assertEquals(
+                loginPage.loginAndGetError("", ""),
+                TestData.USERNAME_REQUIRED_MESSAGE);
     }
 
-    @AfterClass
-    public void teardown() {
-        WebDriverManager.quitDriver();
+    @Test(description = "Closing the error hides the message and stays on login")
+    public void testDismissLoginError() {
+        loginPage.loginAndGetError(TestData.INVALID_USERNAME, TestData.INVALID_PASSWORD);
+        Assert.assertTrue(loginPage.isErrorDisplayed());
+        loginPage.dismissError();
+        Assert.assertFalse(loginPage.isErrorDisplayed());
+        Assert.assertTrue(loginPage.isLoginFormDisplayed());
     }
 }

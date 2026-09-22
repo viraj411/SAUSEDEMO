@@ -1,4 +1,6 @@
 target/
+allure-results/
+allure-report/
 .idea/
 *.iml
 output.log
