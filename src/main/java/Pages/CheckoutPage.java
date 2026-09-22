@@ -81,6 +81,7 @@ public class CheckoutPage extends BasePage {
 
     public void clickCancel() {
         click(cancelButton);
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("checkout-step")));
     }
 
     public List<String> getOverviewItemNames() {
