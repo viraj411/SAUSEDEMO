@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Publish one Allure report at <branch>/<run-id>/ without removing older reports."""
 
+import base64
 import os
 import shutil
 import subprocess
@@ -11,12 +12,26 @@ safe_branch = os.environ.get("SAFE_BRANCH", "").strip("/")
 run_id = os.environ["GITHUB_RUN_ID"]
 if not safe_branch or ".." in safe_branch.split("/"):
     sys.exit("Refusing to publish without a safe branch name")
+
 report_dir = Path(os.environ.get("ALLURE_REPORT", "target/site/allure-maven-plugin"))
 publish = Path(os.environ.get("PAGES_DIR", "site-publish"))
 repository = os.environ["GITHUB_REPOSITORY"]
 token = os.environ["GITHUB_TOKEN"]
 remote = f"https://github.com/{repository}.git"
 history_branch = "allure-history"
+auth_header = "AUTHORIZATION: basic " + base64.b64encode(f"x-access-token:{token}".encode()).decode()
+git_auth = f"http.https://github.com/.extraheader={auth_header}"
+
+
+def run_git(*args, check=True, cwd=None):
+    return subprocess.run(
+        ["git", "-c", git_auth, *args],
+        cwd=cwd,
+        check=check,
+        capture_output=True,
+        text=True,
+    )
+
 
 if not (report_dir / "index.html").is_file():
     sys.exit(f"Allure report was not generated at {report_dir}")
@@ -24,33 +39,45 @@ if not (report_dir / "index.html").is_file():
 if publish.exists():
     shutil.rmtree(publish)
 
-clone = subprocess.run(
-    [
-        "git",
-        "-c",
-        f"http.extraheader=AUTHORIZATION: bearer {token}",
-        "clone",
-        "--depth",
-        "1",
-        "--branch",
-        history_branch,
-        remote,
-        str(publish),
-    ],
-    capture_output=True,
-    text=True,
+clone = run_git(
+    "clone",
+    "--depth",
+    "1",
+    "--branch",
+    history_branch,
+    remote,
+    str(publish),
+    check=False,
 )
 if clone.returncode != 0:
     message = f"{clone.stderr}\n{clone.stdout}".lower()
-    missing_branch = "not found" in message or "couldn't find remote ref" in message
+    if "could not read username" in message or "authentication failed" in message:
+        sys.stderr.write(clone.stderr or clone.stdout)
+        sys.exit(clone.returncode)
+    missing_branch = any(
+        marker in message
+        for marker in (
+            "not found",
+            "couldn't find remote ref",
+            "could not find remote branch",
+            "remote branch",
+        )
+    )
     if not missing_branch:
-        sys.stderr.write(clone.stderr)
+        sys.stderr.write(clone.stderr or clone.stdout)
         sys.exit(clone.returncode)
     if publish.exists():
         shutil.rmtree(publish)
     publish.mkdir(parents=True)
-    subprocess.run(["git", "init"], cwd=publish, check=True)
-    subprocess.run(["git", "checkout", "-b", history_branch], cwd=publish, check=True)
+    subprocess.run(["git", "init"], cwd=publish, check=True, capture_output=True, text=True)
+    subprocess.run(
+        ["git", "checkout", "-b", history_branch],
+        cwd=publish,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    run_git("remote", "add", "origin", remote, cwd=publish)
 
 destination = publish.joinpath(*safe_branch.split("/"), run_id)
 if destination.exists():
@@ -93,12 +120,11 @@ items = "\n".join(f'<li><a href="{path}/">{path}</a></li>' for path in reports)
     encoding="utf-8",
 )
 
-git = ["git", "-C", str(publish)]
-subprocess.run([*git, "add", "-A"], check=True)
-if subprocess.run([*git, "diff", "--cached", "--quiet"]).returncode != 0:
+run_git("add", "-A", cwd=publish)
+if run_git("diff", "--cached", "--quiet", cwd=publish, check=False).returncode != 0:
     subprocess.run(
         [
-            *git,
+            "git",
             "-c",
             "user.email=41898282+github-actions[bot]@users.noreply.github.com",
             "-c",
@@ -107,19 +133,15 @@ if subprocess.run([*git, "diff", "--cached", "--quiet"]).returncode != 0:
             "-m",
             f"Allure report {safe_branch} {run_id}",
         ],
+        cwd=publish,
         check=True,
+        capture_output=True,
+        text=True,
     )
-    subprocess.run(
-        [
-            *git,
-            "-c",
-            f"http.extraheader=AUTHORIZATION: bearer {token}",
-            "push",
-            remote,
-            f"HEAD:{history_branch}",
-        ],
-        check=True,
-    )
+    push = run_git("push", "origin", f"HEAD:{history_branch}", cwd=publish, check=False)
+    if push.returncode != 0:
+        sys.stderr.write(push.stderr or push.stdout)
+        sys.exit(push.returncode)
 
 git_dir = publish / ".git"
 if git_dir.exists():
