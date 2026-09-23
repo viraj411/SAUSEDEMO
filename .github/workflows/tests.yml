@@ -16,9 +16,19 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - browser: chrome
+            os: ubuntu-latest
+          - browser: firefox
+            os: ubuntu-latest
+          - browser: safari
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
     outputs:
-      report_url: ${{ steps.metadata.outputs.report_url }}
+      report_url:  ${{ steps.metadata.outputs.report_url }}
       pages_ready: ${{ steps.stage.outputs.ready }}
     steps:
       - name: Checkout code
@@ -31,14 +41,27 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # ── Browser setup (one step per browser) ──────────────────────────────
       - name: Set up Chrome
+        if: matrix.browser == 'chrome'
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
 
-      - name: Run tests
+      - name: Set up Firefox
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
+      - name: Enable Safari WebDriver
+        if: matrix.browser == 'safari'
+        run: sudo safaridriver --enable
+      # ──────────────────────────────────────────────────────────────────────
+
+      - name: Run tests (${{ matrix.browser }})
         id: tests
-        run: mvn -B clean test
+        run: mvn -B clean test -Dbrowser=${{ matrix.browser }}
         continue-on-error: true
 
       - name: Add branch and run id to the report
@@ -56,17 +79,18 @@ jobs:
           REPORT_URL: ${{ steps.metadata.outputs.report_url }}
         run: python3 .github/scripts/allure_summary.py
 
-      - name: Upload Allure report
+      - name: Upload Allure report (${{ matrix.browser }})
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ github.run_id }}
+          name: allure-report-${{ matrix.browser }}-${{ github.run_id }}
           path: target/site/allure-maven-plugin
           if-no-files-found: error
 
+      # Pages staging only for the Chrome job (reference browser for the deploy)
       - name: Stage report at branch and run id
         id: stage
-        if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: always() && matrix.browser == 'chrome' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           SAFE_BRANCH: ${{ steps.metadata.outputs.safe_branch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +108,7 @@ jobs:
 
   deploy-report:
     needs: test
-    if: always() && needs.test.result != 'cancelled' && needs.test.outputs.pages_ready == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    if: always() && needs.test.result != 'cancelled' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment:
       name: github-pages

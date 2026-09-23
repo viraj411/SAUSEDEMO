@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  Cross-browser suite: Chrome, Firefox, and Safari run all test groups in parallel.
+  thread-count = 3 browsers × 5 test groups = 15 concurrent threads.
+
+  Usage:
+    mvn test -DtestSuite=testng-crossbrowser.xml
+
+  Note: Safari tests require macOS with SafariDriver enabled:
+    sudo safaridriver - -enable
+-->
+<suite name="CrossBrowserSuite" parallel="tests" thread-count="15">
+
+    <!-- ═══════════════════════════════ CHROME ═══════════════════════════════ -->
+
+    <test name="Chrome - Login">
+        <parameter name="browser" value="chrome"/>
+        <classes><class name="Tests.LoginPageTests"/></classes>
+    </test>
+
+    <test name="Chrome - Homepage">
+        <parameter name="browser" value="chrome"/>
+        <classes><class name="Tests.HomepageTests"/></classes>
+    </test>
+
+    <test name="Chrome - Cart">
+        <parameter name="browser" value="chrome"/>
+        <classes><class name="Tests.CartTests"/></classes>
+    </test>
+
+    <test name="Chrome - Checkout">
+        <parameter name="browser" value="chrome"/>
+        <classes><class name="Tests.CheckoutTests"/></classes>
+    </test>
+
+    <test name="Chrome - E2E Test">
+        <parameter name="browser" value="chrome"/>
+        <classes><class name="Tests.SauceDemoTest"/></classes>
+    </test>
+
+    <!-- ══════════════════════════════ FIREFOX ═══════════════════════════════ -->
+
+    <test name="Firefox - Login">
+        <parameter name="browser" value="firefox"/>
+        <classes><class name="Tests.LoginPageTests"/></classes>
+    </test>
+
+    <test name="Firefox - Homepage">
+        <parameter name="browser" value="firefox"/>
+        <classes><class name="Tests.HomepageTests"/></classes>
+    </test>
+
+    <test name="Firefox - Cart">
+        <parameter name="browser" value="firefox"/>
+        <classes><class name="Tests.CartTests"/></classes>
+    </test>
+
+    <test name="Firefox - Checkout">
+        <parameter name="browser" value="firefox"/>
+        <classes><class name="Tests.CheckoutTests"/></classes>
+    </test>
+
+    <test name="Firefox - E2E Test">
+        <parameter name="browser" value="firefox"/>
+        <classes><class name="Tests.SauceDemoTest"/></classes>
+    </test>
+
+    <!-- ══════════════════════════════ SAFARI ════════════════════════════════ -->
+
+    <test name="Safari - Login">
+        <parameter name="browser" value="safari"/>
+        <classes><class name="Tests.LoginPageTests"/></classes>
+    </test>
+
+    <test name="Safari - Homepage">
+        <parameter name="browser" value="safari"/>
+        <classes><class name="Tests.HomepageTests"/></classes>
+    </test>
+
+    <test name="Safari - Cart">
+        <parameter name="browser" value="safari"/>
+        <classes><class name="Tests.CartTests"/></classes>
+    </test>
+
+    <test name="Safari - Checkout">
+        <parameter name="browser" value="safari"/>
+        <classes><class name="Tests.CheckoutTests"/></classes>
+    </test>
+
+    <test name="Safari - E2E Test">
+        <parameter name="browser" value="safari"/>
+        <classes><class name="Tests.SauceDemoTest"/></classes>
+    </test>
+
+</suite>

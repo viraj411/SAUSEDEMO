@@ -12,6 +12,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <allure.version>2.32.0</allure.version>
+        <!-- Override with -DtestSuite=testng-crossbrowser.xml for cross-browser runs -->
+        <testSuite>testng.xml</testSuite>
+        <!-- Override with -Dbrowser=firefox|safari to target a specific browser -->
+        <browser>chrome</browser>
     </properties>
 
     <dependencies>
@@ -32,7 +36,6 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -43,10 +46,11 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                        <suiteXmlFile>${testSuite}</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                        <browser>${browser}</browser>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
