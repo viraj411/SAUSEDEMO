@@ -1,4 +1,7 @@
 <suite name="SauceDemoSuite">
+    <listeners>
+        <listener class-name="Tests.ScreenshotListener"/>
+    </listeners>
     <test name="Login">
         <classes>
             <class name="Tests.LoginPageTests"/>

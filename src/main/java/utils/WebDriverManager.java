@@ -24,6 +24,11 @@ public final class WebDriverManager {
         return driver;
     }
 
+    /** Returns the active driver without creating one (null if not initialised). */
+    public static WebDriver currentDriver() {
+        return driver;
+    }
+
     public static void quitDriver() {
         if (driver != null) {
             driver.quit();
