@@ -31,10 +31,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
+      - name: Install Playwright browser
+        run: |
+          mvn -B -q dependency:build-classpath -Dmdep.outputFile=target/classpath.txt -DincludeScope=test
+          java -cp "$(cat target/classpath.txt)" com.microsoft.playwright.CLI install --with-deps chromium
 
       - name: Run tests
         id: tests
