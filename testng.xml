@@ -22,6 +22,11 @@
             <class name="Tests.CheckoutTests"/>
         </classes>
     </test>
+    <test name="Playwright BDD">
+        <classes>
+            <class name="bdd.runner.RunCucumberTest"/>
+        </classes>
+    </test>
     <test name="E2E Test">
         <classes>
             <class name="Tests.SauceDemoTest"/>
